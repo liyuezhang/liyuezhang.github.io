@@ -1,0 +1,1463 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>天道酬勤</title>
+  <subtitle>努力到无能为力，拼搏到感动自己足以</subtitle>
+  <link href="/atom.xml" rel="self"/>
+  
+  <link href="http://yuelizhang.bid/"/>
+  <updated>2017-08-12T10:42:07.145Z</updated>
+  <id>http://yuelizhang.bid/</id>
+  
+  <author>
+    <name>张立月</name>
+    
+  </author>
+  
+  <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>10个JavaScript难点</title>
+    <link href="http://yuelizhang.bid/2017/03/02/js/"/>
+    <id>http://yuelizhang.bid/2017/03/02/js/</id>
+    <published>2017-03-02T11:56:30.000Z</published>
+    <updated>2017-08-12T10:42:07.145Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="10个JavaScript难点概括"><a href="#10个JavaScript难点概括" class="headerlink" title="10个JavaScript难点概括"></a>10个JavaScript难点概括</h1><h1 id="1-立即执行函数"><a href="#1-立即执行函数" class="headerlink" title="1. 立即执行函数"></a>1. 立即执行函数</h1><p>立即执行函数，即Immediately Invoked Function Expression (IIFE)，正如它的名字，就是创建函数的同时立即执行。它没有绑定任何事件，也无需等待任何异步操作：</p>
+<pre><code>(function() {
+     // 代码
+     // ...
+})();
+</code></pre><p>function(){…}是一个匿名函数，包围它的一对括号将其转换为一个表达式，紧跟其后的一对括号调用了这个函数。立即执行函数也可以理解为立即调用一个匿名函数。立即执行函数最常见的应用场景就是：将var变量的作用域限制于你们函数内，这样可以避免命名冲突。</p>
+<h1 id="2-闭包"><a href="#2-闭包" class="headerlink" title="2. 闭包"></a>2. 闭包</h1><p>对于闭包(closure)，当外部函数返回之后，内部函数依然可以访问外部函数的变量。</p>
+<pre><code>function f1()
+{
+    var N = 0; // N是f1函数的局部变量
+
+function f2() // f2是f1函数的内部函数，是闭包
+{
+    N += 1; // 内部函数f2中使用了外部函数f1中的变量N
+    console.log(N);
+}
+return f2;
+}
+var result = f1();
+result(); // 输出1
+result(); // 输出2
+result(); // 输出3
+</code></pre><p>代码中，外部函数f1只执行了一次，变量N设为0，并将内部函数f2赋值给了变量result。由于外部函数f1已经执行完毕，其内部变量N应该在内存中被清除，然而事实并不是这样：我们每次调用result的时候，发现变量N一直在内存中，并且在累加。为什么呢？这就是闭包的神奇之处了！</p>
+<h1 id="3-使用闭包定义私有变量"><a href="#3-使用闭包定义私有变量" class="headerlink" title="3. 使用闭包定义私有变量"></a>3. 使用闭包定义私有变量</h1><p>通常，JavaScript开发者使用下划线作为私有变量的前缀。但是实际上，这些变量依然可以被访问和修改，并非真正的私有变量。这时，使用闭包可以定义真正的私有变量：</p>
+<pre><code>function Product() {
+    var name;
+    this.setName = function(value) {
+        name = value;
+    };
+    this.getName = function() {
+        return name;
+    };
+}
+var p = new Product();
+p.setName(&quot;Fundebug&quot;);
+console.log(p.name); // 输出undefined
+console.log(p.getName()); // 输出Fundebug
+代码中，对象p的的name属性为私有属性，使用p.name不能直接访问。
+</code></pre><h1 id="4-prototype"><a href="#4-prototype" class="headerlink" title="4. prototype"></a>4. prototype</h1><p>每个JavaScript构造函数都有一个prototype属性，用于设置所有实例对象需要共享的属性和方法。prototype属性不能列举。JavaScript仅支持通过prototype属性进行继承属性和方法。</p>
+<pre><code>function Rectangle(x, y)
+{
+    this._length = x;
+    this._breadth = y;
+}
+Rectangle.prototype.getDimensions = function()
+{
+    return {
+        length: this._length,
+        breadth: this._breadth
+    };
+};
+var x = new Rectangle(3, 4);
+var y = new Rectangle(4, 3);
+console.log(x.getDimensions()); // { length: 3, breadth: 4 }
+console.log(y.getDimensions()); // { length: 4, breadth: 3 }
+</code></pre><p>代码中，x和y都是构造函数Rectangle创建的对象实例，它们通过prototype继承了getDimensions方法。</p>
+<h1 id="5-模块化"><a href="#5-模块化" class="headerlink" title="5. 模块化"></a>5. 模块化</h1><p>JavaScript并非模块化编程语言，至少ES6落地之前都不是。然而对于一个复杂的Web应用，模块化编程是一个最基本的要求。这时，可以使用立即执行函数来实现模块化，正如很多JS库比如jQuery</p>
+<pre><code>var module = (function() {
+    var N = 5;
+    function print(x) {
+        console.log(&quot;The result is: &quot; + x);
+    }
+    function add(a) {
+        var x = a + N;
+        print(x);
+    }
+    return {
+        description: &quot;This is description&quot;,
+        add: add
+    };
+})();
+console.log(module.description); // 输出&quot;this is description&quot; 
+module.add(5); // 输出“The result is: 10”
+</code></pre><p>所谓模块化，就是根据需要控制模块内属性与方法的可访问性，即私有或者公开。在代码中，module为一个独立的模块，N为其私有属性，print为其私有方法，decription为其公有属性，add为其共有方法。</p>
+<h1 id="6-变量提升"><a href="#6-变量提升" class="headerlink" title="6. 变量提升"></a>6. 变量提升</h1><p>JavaScript会将所有变量和函数声明移动到它的作用域的最前面，这就是所谓的变量提升(Hoisting)。也就是说，无论你在什么地方声明变量和函数，解释器都会将它们移动到作用域的最前面。因此我们可以先使用变量和函数，而后声明它们。</p>
+<p>但是，仅仅是变量声明被提升了，而变量赋值不会被提升。如果你不明白这一点，有时则会出错：</p>
+<pre><code>console.log(y);  // 输出undefined
+y = 2; // 初始化y
+上面的代码等价于下面的代码：
+
+var y;  // 声明y
+console.log(y);  // 输出undefined
+y = 2; // 初始化y
+为了避免BUG，开发者应该在每个作用域开始时声明变量和函数。
+</code></pre><h1 id="7-柯里化"><a href="#7-柯里化" class="headerlink" title="7. 柯里化"></a>7. 柯里化</h1><p>柯里化，即Currying，可以使函数变得更加灵活。我们可以一次性传入多个参数调用它；也可以只传入一部分参数来调用它，让它返回一个函数去处理剩下的参数。</p>
+<pre><code>var add = function(x) {
+    return function(y) {
+        return x + y;
+    };
+};
+console.log(add(1)(1)); // 输出2
+var add1 = add(1);
+console.log(add1(1)); // 输出2
+var add10 = add(10);
+console.log(add10(1)); // 输出11
+代码中，我们可以一次性传入2个1作为参数add(1)(1)，也可以传入1个参数之后获取add1与add10函数，这样使用起来非常灵活。
+</code></pre><h1 id="8-apply-call与bind方法"><a href="#8-apply-call与bind方法" class="headerlink" title="8. apply, call与bind方法"></a>8. apply, call与bind方法</h1><p>JavaScript开发者有必要理解apply、call与bind方法的不同点。它们的共同点是第一个参数都是this，即函数运行时依赖的上下文。</p>
+<p>三者之中，call方法是最简单的，它等价于指定this值调用函数：</p>
+<pre><code>var user = {
+    name: &quot;Rahul Mhatre&quot;,
+    whatIsYourName: function() {
+        console.log(this.name);
+    }
+};
+user.whatIsYourName(); // 输出&quot;Rahul Mhatre&quot;,
+var user2 = {
+    name: &quot;Neha Sampat&quot;
+};
+user.whatIsYourName.call(user2); // 输出&quot;Neha Sampat&quot;
+</code></pre><p>apply方法与call方法类似。两者唯一的不同点在于，apply方法使用数组指定参数，而call方法每个参数单独需要指定：</p>
+<pre><code>apply(thisArg, [argsArray])
+call(thisArg, arg1, arg2, …)
+var user = {
+    greet: &quot;Hello!&quot;,
+    greetUser: function(userName) {
+        console.log(this.greet + &quot; &quot; + userName);
+    }
+};
+var greet1 = {
+    greet: &quot;Hola&quot;
+};
+user.greetUser.call(greet1, &quot;Rahul&quot;); // 输出&quot;Hola Rahul&quot;
+user.greetUser.apply(greet1, [&quot;Rahul&quot;]); // 输出&quot;Hola Rahul&quot;
+</code></pre><p>使用bind方法，可以为函数绑定this值，然后作为一个新的函数返回：</p>
+<pre><code>var user = {
+     greet: &quot;Hello!&quot;,
+     greetUser: function(userName) {
+     console.log(this.greet + &quot; &quot; + userName);
+     }
+};
+var greetHola = user.greetUser.bind({greet: &quot;Hola&quot;});
+var greetBonjour = user.greetUser.bind({greet: &quot;Bonjour&quot;});
+greetHola(&quot;Rahul&quot;) // 输出&quot;Hola Rahul&quot;
+greetBonjour(&quot;Rahul&quot;) // 输出&quot;Bonjour Rahul&quot;
+</code></pre><h1 id="9-Memoization"><a href="#9-Memoization" class="headerlink" title="9. Memoization"></a>9. Memoization</h1><p>Memoization用于优化比较耗时的计算，通过将计算结果缓存到内存中，这样对于同样的输入值，下次只需要中内存中读取结果。</p>
+<pre><code>function memoizeFunction(func)
+{
+    var cache = {};
+    return function()
+    {
+        var key = arguments[0];
+        if (cache[key])
+        {
+            return cache[key];
+        }
+        else
+        {
+            var val = func.apply(this, arguments);
+            cache[key] = val;
+            return val;
+        }
+    };
+}
+var fibonacci = memoizeFunction(function(n)
+{
+    return (n === 0 || n === 1) ? n : fibonacci(n - 1) + fibonacci(n - 2);
+});
+console.log(fibonacci(100)); // 输出354224848179262000000
+console.log(fibonacci(100)); // 输出354224848179262000000
+代码中，第2次计算fibonacci(100)则只需要在内存中直接读取结果。
+</code></pre><h1 id="10-函数重载"><a href="#10-函数重载" class="headerlink" title="10. 函数重载"></a>10. 函数重载</h1><p>所谓函数重载(method overloading)，就是函数名称一样，但是输入输出不一样。或者说，允许某个函数有各种不同输入，根据不同的输入，返回不同的结果。凭直觉，函数重载可以通过if…else或者switch实现，这就不去管它了。jQuery之父John Resig提出了一个非常巧(bian)妙(tai)的方法，利用了闭包。</p>
+<p>从效果上来说，people对象的find方法允许3种不同的输入: 0个参数时，返回所有人名；1个参数时，根据firstName查找人名并返回；2个参数时，根据完整的名称查找人名并返回。</p>
+<p>难点在于，people.find只能绑定一个函数，那它为何可以处理3种不同的输入呢？它不可能同时绑定3个函数find0,find1与find2啊！这里的关键在于old属性。</p>
+<p>由addMethod函数的调用顺序可知，people.find最终绑定的是find2函数。然而，在绑定find2时，old为find1；同理，绑定find1时，old为find0。3个函数find0,find1与find2就这样通过闭包链接起来了。</p>
+<p>根据addMethod的逻辑，当f.length与arguments.length不匹配时，就会去调用old，直到匹配为止。</p>
+<pre><code>function addMethod(object, name, f)
+{　　
+    var old = object[name];　　
+    object[name] = function()
+    {
+        // f.length为函数定义时的参数个数
+        // arguments.length为函数调用时的参数个数　　　　
+        if (f.length === arguments.length)
+        {　　
+            return f.apply(this, arguments);　　　　
+        }
+        else if (typeof old === &quot;function&quot;)
+        {
+            return old.apply(this, arguments);　　　　
+        }　　
+    };
+}
+// 不传参数时，返回所有name
+function find0()
+{　　
+    return this.names;
+}
+// 传一个参数时，返回firstName匹配的name
+function find1(firstName)
+{　　
+    var result = [];　　
+    for (var i = 0; i &lt; this.names.length; i++)
+    {　　　　
+        if (this.names[i].indexOf(firstName) === 0)
+        {　　　　　　
+            result.push(this.names[i]);　　　　
+        }　　
+    }　　
+    return result;
+}
+// 传两个参数时，返回firstName和lastName都匹配的name
+function find2(firstName, lastName)
+{　
+    var result = [];　　
+    for (var i = 0; i &lt; this.names.length; i++)
+    {　　　　
+        if (this.names[i] === (firstName + &quot; &quot; + lastName))
+        {　　　　　　
+            result.push(this.names[i]);　　　　
+        }　　
+    }　　
+    return result;
+}
+var people = {　　
+    names: [&quot;Dean Edwards&quot;, &quot;Alex Russell&quot;, &quot;Dean Tom&quot;]
+};
+addMethod(people, &quot;find&quot;, find0);
+addMethod(people, &quot;find&quot;, find1);
+addMethod(people, &quot;find&quot;, find2);
+console.log(people.find()); // 输出[&quot;Dean Edwards&quot;, &quot;Alex Russell&quot;, &quot;Dean Tom&quot;]
+console.log(people.find(&quot;Dean&quot;)); // 输出[&quot;Dean Edwards&quot;, &quot;Dean Tom&quot;]
+console.log(people.find(&quot;Dean&quot;, &quot;Edwards&quot;)); // 输出[&quot;Dean Edwards&quot;]
+</code></pre>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;10个JavaScript难点概括&quot;&gt;&lt;a href=&quot;#10个JavaScript难点概括&quot; class=&quot;headerlink&quot; title=&quot;10个JavaScript难点概括&quot;&gt;&lt;/a&gt;10个JavaScript难点概括&lt;/h1&gt;&lt;h1 id=&quot;1-立即执
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>JS当中的数组去重、冒泡、快速排序</title>
+    <link href="http://yuelizhang.bid/2016/11/12/sort/"/>
+    <id>http://yuelizhang.bid/2016/11/12/sort/</id>
+    <published>2016-11-12T09:28:36.000Z</published>
+    <updated>2017-08-12T09:54:50.855Z</updated>
+    
+    <content type="html"><![CDATA[<pre><code>## 数组去重：
+
+
+        var arr = [1,1,1,2,2,2,3,3,3];
+        function Array(arr){
+            var res= [];
+            for(var i=0;i&lt;arr.length;i++){
+                if(res.indexOf(arr[i])==-1){
+                    res.push(arr[i]);
+                }
+            }
+            console.log(res);
+        }
+        Array(arr);
+
+
+
+
+  ## 快速排序 ：
+　　（1）在数据集之中，找一个基准点  
+　　（2）建立两个数组，分别存储左边和右边的数组  
+　　（3）利用递归进行下次比较 
+
+
+
+    function quickSort(arr){
+        if(arr.length&lt;=1){return arr;}如果数组只有一个数，就直接返回；
+        var num = Math.floor(arr.length/2);找到中间数的索引值，如果是浮点数，则向下取整
+        var newValue = arr.splice(num,1);找到中间数的值 
+        var left=[],right=[];
+        for(var i=0;i&lt;arr.length;i++){
+            if(arr[i]&lt;newValue){
+                left.push(arr[i]);    基准点的左边的数传到左边数组
+            }else{
+                right.push(arr[i]);基准点的右边的数传到右边数组
+            }
+        }
+        return quickSort(left).concat(newValue,quickSort(right));递归不断重复比较
+
+    }
+    console.log(quickSort([1,3,4,5,6,2]));
+
+
+
+## 冒泡排序：
+
+　　随便从数组中拿一位数和后一位比较，如果是想从小到大排序，那么就把小的那一位放到前面，大的放在后面，简单来说就是交换它们的位置，如此反复的交换位置就可以得到排序的效果。
+
+
+var arr = [3,1,4,2,5,21,6,15,63];
+
+function sortA(arr){
+    for(var i=0;i&lt;arr.length-1;i++){
+        因为一次循环只能交换一个最大的值，所以需要再套一层for循环。
+        for(var j=i+1;j&lt;arr.length;j++){
+                      获取第一个值和后一个值比较
+            var cur = arr[i];
+            if(cur&gt;arr[j]){
+                       因为需要交换值，所以会把后一个值替换，我们要先保存下来
+                var index = arr[j];
+                        交换值
+                arr[j] = cur;
+                arr[i] = index;
+            }
+        }
+    }
+    return arr;
+}
+console.log(sortA(arr));
+</code></pre>]]></content>
+    
+    <summary type="html">
+    
+      &lt;pre&gt;&lt;code&gt;## 数组去重：
+
+
+        var arr = [1,1,1,2,2,2,3,3,3];
+        function Array(arr){
+            var res= [];
+            for(var i=0;i
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>JavaScript的一些知识点</title>
+    <link href="http://yuelizhang.bid/2016/10/01/post/"/>
+    <id>http://yuelizhang.bid/2016/10/01/post/</id>
+    <published>2016-10-01T12:16:17.000Z</published>
+    <updated>2017-08-12T10:42:07.146Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="1-执行上下文："><a href="#1-执行上下文：" class="headerlink" title="1.执行上下文："></a>1.执行上下文：</h1><p>单线程</p>
+<p>同步执行，只有栈顶的上下文处于执行中，其他上下文需要等待</p>
+<p>全局上下文只有唯一的一个，它在浏览器关闭时出栈</p>
+<p>函数的执行上下文的个数没有限制</p>
+<p>每次某个函数被调用，就会有个新的执行上下文为其创建，即使是调用的自身函数，也是如此</p>
+<ul>
+<li>创建阶段<br>在这个阶段中，执行上下文会分别创建变量对象，建立作用域链，以及确定this的指向</li>
+<li>代码执行阶段<br>创建完成之后，就会开始执行代码，这个时候，会完成变量赋值，函数引用，以及执行其他代码。<br>变量对象的创建，依次经历了以下几个过程。<ol>
+<li>建立arguments对象。检查当前上下文中的参数，建立该对象下的属性与属性值。</li>
+<li>检查当前上下文的函数声明，也就是使用function关键字声明的函数。在变量对象中以函数名建立一个属性，属性值为指向该函数所在内存地址的引用。如果函数名的属性已经存在，那么该属性将会被新的引用所覆盖。</li>
+<li>检查当前上下文中的变量声明，每找到一个变量声明，就在变量对象中以变量名建立一个属性，属性值为undefined。如果该变量名的属性已经存在，为了防止同名的函数被修改为undefined，则会直接跳过，原属性值不会被修改.</li>
+</ol>
+</li>
+</ul>
+<h1 id="2-变量对象和活动对象有什么区别，他们其实都是同一个对象，只是处于执行上下文的不同生命周期"><a href="#2-变量对象和活动对象有什么区别，他们其实都是同一个对象，只是处于执行上下文的不同生命周期" class="headerlink" title="2.变量对象和活动对象有什么区别，他们其实都是同一个对象，只是处于执行上下文的不同生命周期"></a>2.变量对象和活动对象有什么区别，他们其实都是同一个对象，只是处于执行上下文的不同生命周期</h1><pre><code>demo1:
+function test() {
+    console.log(a);
+    console.log(foo());
+
+    var a = 1;
+    function foo() {
+        return 2;
+    }
+}
+
+test();
+</code></pre><p>function声明会比var声明优先级更高一点，所以在执行过程中顺序就变成了：</p>
+<pre><code>function test() {
+    function foo() {
+        return 2;
+    }
+    var a;
+    console.log(a);
+    console.log(foo());
+    a = 1;
+}
+
+test();
+
+demo2:
+function test() {
+    console.log(foo);
+    console.log(bar);
+
+    var foo = &apos;Hello&apos;;
+    console.log(foo);
+    var bar = function () {
+        return &apos;world&apos;;
+    }
+
+    function foo() {
+        return &apos;hello&apos;;
+    }
+}
+
+test();//console.log(foo)会打印函数体，console.log(foo())才打印函数执行结果。
+</code></pre><h1 id="3-JavaScript代码的整个执行过程，分为两个阶段，代码编译阶段与代码执行阶段。编译阶段由编译器完成，将代码翻译成可执行代码，这个阶段作用域规则会确定。执行阶段由引擎完成，主要任务是执行可执行代码，垃圾回收，执行上下文在这个阶段创建"><a href="#3-JavaScript代码的整个执行过程，分为两个阶段，代码编译阶段与代码执行阶段。编译阶段由编译器完成，将代码翻译成可执行代码，这个阶段作用域规则会确定。执行阶段由引擎完成，主要任务是执行可执行代码，垃圾回收，执行上下文在这个阶段创建" class="headerlink" title="3.JavaScript代码的整个执行过程，分为两个阶段，代码编译阶段与代码执行阶段。编译阶段由编译器完成，将代码翻译成可执行代码，这个阶段作用域规则会确定。执行阶段由引擎完成，主要任务是执行可执行代码，垃圾回收，执行上下文在这个阶段创建"></a>3.JavaScript代码的整个执行过程，分为两个阶段，代码编译阶段与代码执行阶段。编译阶段由编译器完成，将代码翻译成可执行代码，这个阶段作用域规则会确定。执行阶段由引擎完成，主要任务是执行可执行代码，垃圾回收，执行上下文在这个阶段创建</h1><h1 id="4-作用域链是由一系列变量对象组成，我们可以在这个单向通道中，查询变量对象中的标识符-变量名或函数名-，这样就可以访问到上一层作用域中的变量了。"><a href="#4-作用域链是由一系列变量对象组成，我们可以在这个单向通道中，查询变量对象中的标识符-变量名或函数名-，这样就可以访问到上一层作用域中的变量了。" class="headerlink" title="4.作用域链是由一系列变量对象组成，我们可以在这个单向通道中，查询变量对象中的标识符(变量名或函数名)，这样就可以访问到上一层作用域中的变量了。"></a>4.作用域链是由一系列变量对象组成，我们可以在这个单向通道中，查询变量对象中的标识符(变量名或函数名)，这样就可以访问到上一层作用域中的变量了。</h1><hr>
+<h1 id="3-闭包："><a href="#3-闭包：" class="headerlink" title="3.闭包："></a>3.闭包：</h1><p>闭包与作用域链息息相关；</p>
+<p>闭包是在函数执行过程中被确认。</p>
+<p>闭包的应用场景</p>
+<p>接下来，我们来总结下，闭包的常用场景。</p>
+<p>延迟函数setTimeout</p>
+<p>我们知道setTimeout的第一个参数是一个函数，第二个参数则是延迟的时间。在下面例子中，</p>
+<pre><code>function fn() {
+console.log(&apos;this is test.&apos;)
+}
+var timer =  setTimeout(fn, 1000);
+console.log(timer);
+</code></pre><p>按道理来说，既然fn被作为参数传入了setTimeout中，那么fn将会被保存在setTimeout变量对象中，setTimeout执行完毕之后，它的变量对象也就不存在了。可是事实上并不是这样。至少在这一秒钟的事件里，它仍然是存在的。这正是因为闭包。</p>
+<hr>
+<h1 id="4-this的指向"><a href="#4-this的指向" class="headerlink" title="4.this的指向"></a>4.this的指向</h1><p>this的指向，是在函数被调用的时候确定的。也就是执行上下文被创建时确定的。</p>
+<pre><code>var a = 10;
+var obj = {
+    a: 20
+}
+
+function fn () {
+    console.log(this.a);
+}
+
+fn(); // 10
+fn.call(obj); // 20
+
+var a = 20;
+var foo = {
+    a: 10,
+    getA: function () {
+        return this.a;
+    }
+}
+console.log(foo.getA()); // 10
+
+var test = foo.getA;
+console.log(test());  // 20
+</code></pre><p>foo.getA()中，getA是调用者，他不是独立调用，被对象foo所拥有，因此它的this指向了foo。而test()作为调用者，尽管他与foo.getA的引用相同，但是它是独立调用的，因此this指向undefined，在非严格模式，自动转向全局window。</p>
+<pre><code>  // demo03
+ var a = 20; 
+ var obj = {
+ a: 10,
+ c: this.a + 20,
+
+fn: function () {
+
+    return this.a;
+
+}
+} 
+console.log(obj.c);
+</code></pre><p>在一个函数上下文中，this由调用者提供，由调用函数的方式来决定。如果调用者函数，被某一个对象所拥有，那么该函数在调用时，内部的this指向该对象。如果函数独立调用，那么该函数内部的this，则指向undefined。但是在非严格模式中，当this指向undefined时，它会被自动指向全局对象。</p>
+<p>当obj在全局声明时，无论obj.c在什么地方调用，这里的this都指向全局对象，而当obj在函数环境中声明时，这个this指向undefined，在非严格模式下，会自动转向全局对象。</p>
+<h1 id="5-使用call，apply显示指定this"><a href="#5-使用call，apply显示指定this" class="headerlink" title="5.使用call，apply显示指定this"></a>5.使用call，apply显示指定this</h1><p>JavaScript内部提供了一种机制，让我们可以自行手动设置this的指向。它们就是call与apply。所有的函数都具有着两个方法。它们除了参数略有不同，其功能完全一样。它们的第一个参数都为this将要指向的对象。</p>
+<p>如下例子所示。fn并非属于对象obj的方法，但是通过call，我们将fn内部的this绑定为obj，因此就可以使用this.a访问obj的a属性了。这就是call/apply的用法。</p>
+<pre><code>function fn() {
+    console.log(this.a);
+}
+var obj = {
+    a: 20
+}
+
+fn.call(obj);
+</code></pre><p>而call与applay后面的参数，都是向将要执行的函数传递参数。其中call以一个一个的形式传递，apply以数组的形式传递。这是他们唯一的不同。</p>
+<pre><code>function fn(num1, num2) {
+    console.log(this.a + num1 + num2);
+}
+var obj = {
+    a: 20
+}
+
+fn.call(obj, 100, 10); // 130
+fn.apply(obj, [20, 10]); // 50
+</code></pre><h1 id="6-http协议："><a href="#6-http协议：" class="headerlink" title="6.http协议："></a>6.http协议：</h1><p>超文本传输协议(HTTP，HyperText Transfer Protocol)</p>
+<p>是互联网上应用最为广泛的一种网络协议。所有的WWW文件都必须遵守这个标准。设计HTTP最初的目的是为了提供一种发布和接收HTML页面的方法。</p>
+<p>通常，由HTTP客户端发起一个请求，建立一个到服务器指定端口（默认是80端口）的TCP连接。HTTP服务器则在那个端口监听客户端发送过来的请求。一旦收到请求，服务器（向客户端）发回一个状态行，比如”HTTP/1.1 200 OK”，和（响应的）消息，消息的消息体可能是请求的文件、错误消息、或者其它一些信息。</p>
+<p>HTTP使用TCP而不是UDP的原因在于（打开一个）一个网页必须传送很多数据，而TCP协议提供传输控制，按顺序组织数据，和错误纠正。具体细节请参考‘TCP和UDP的不同’。</p>
+<p>通过HTTP或者HTTPS协议请求的资源由统一资源定位器（Uniform Resource Identifiers）（或者，更准确一些，URLs）来标识。</p>
+<p>请求行和标题必须以<cr><lf> 作为结尾（也就是，回车然后换行）。空行内必须只有<cr><lf>而无其他空格。在HTTP/1.1 协议中，所有的请求头，除Host外，都是可选的。</lf></cr></lf></cr></p>
+<p>我们知道，Internet的基本协议是TCP/IP协议，然而在TCP/IP模型最上层的是应用层（Application layer），它包含所有高层的协议。高层协议有：文件传输协议FTP、电子邮件传输协议SMTP、域名系统服务DNS、网络新闻传输协议NNTP和HTTP协议等。</p>
+<p>　　HTTP协议（HyperText Transfer Protocol，超文本传输协议）是用于从WWW服务器传输超文本到本地浏览器的传送协议。它可以使浏览器更加高效，使网络传输减少。它不仅保证计算机正确快速地传输超文本文档，还确定传输文档中的哪一部分，以及哪部分内容首先显示(如文本先于图形)等。这就是你为什么在浏览器中看到的网页地址都是以<a href="http://开头的原因。" target="_blank" rel="external">http://开头的原因。</a></p>
+<h1 id="7-ajax"><a href="#7-ajax" class="headerlink" title="7.ajax:"></a>7.ajax:</h1><p>1.同步：客户端浏览器先发起请求，等待响应，服务器返回响应，客户端才会渲染内容，也就是说客户端每一次发起请求的时候都会把之前的内容删掉，等待服务器给下一次响应</p>
+<p>2.异步：客户端有部分可见，发起请求，服务器返回响应，客户端把更新后的内容追加到dom树上，此时客户端和服务器是同时运行的，浏览器在浏览网页的同时服务器会返回新的内容</p>
+<p>原生ajax:</p>
+<pre><code>var xhr = new XMLHttpRequest();
+xhr.onreadystatechange = function(){
+if(xhr.readyState==4&amp;&amp;xhr.status==200){  //响应完成且成功
+xhr.open（“请求方法”，url，true)
+xhr.send（null/请求主体）//请求主体（键值对，文件上传，json格式）,get没有请求主体，post要设置头部信息
+）
+}
+</code></pre><p>jquery的ajax:<br>    $.ajax({</p>
+<p>  type:’请求方法’，</p>
+<p>  url:’请求地址’，</p>
+<p>  data:’请求数据’（可以是对象，或者是键值对的形式），</p>
+<p>  success:fn  (成功的回调函数)，</p>
+<p>  error:fn,</p>
+<p>  beforeSend:fn,  (请求发送之前的回调)，</p>
+<p>  complete:fn   (不管成功还是失败都要执行的回调)</p>
+<p>})</p>
+<h1 id="8-跨域问题："><a href="#8-跨域问题：" class="headerlink" title="8.跨域问题："></a>8.跨域问题：</h1><p>指从一个url上的资源访问另一个url上的资源，这两个资源不在同一个域上，如协议名，域名，端口号不同，这就叫跨域</p>
+<p>浏览器哪些情况下允许跨域：</p>
+<p>带src和href属性的标签，如srcript,img,link,iframe</p>
+<p>所有浏览器都默认禁止xhr对象的跨域请求—-处于“同源安全策略”，不允许放在当前的dom树上。</p>
+<p>面试题：</p>
+<p>我们公司项目项目很大，为了功能上的清晰划分，在static.tedu.cn上放置了所有的静态资源，在data.tedu.cn上放置了所有的动态数据（json格式），请问如何在static.tedu.cn上获取data.tedu.cn/newlist.json上的动态数据？如何绕过浏览器的xhr跨域限制？</p>
+<p>答案：1.CORS方案： （跨源的资源共享）cross origin  Resource  Share（适用于自己可以控制动态页面的编写）</p>
+<p>在被访问的资源响应中添加如下的头部：</p>
+<p>设置一个响应头部（访问控制允许来源）header(‘Access-Control-Allow-Origin:<a href="http://127.0.0.1" target="_blank" rel="external">http://127.0.0.1</a>‘);</p>
+<p>允许从指定的域名发起跨域请求。</p>
+<p>2.jsonp方案：JSON with padding,填充式json，是一种使用json数据的手段、方式。</p>
+<p>思路：使用动态创建的script标签代替xhr发起异步的请求，获取跨域的数据，在本地的Js中加以处理.</p>
+<script async="true" src="跨域地址/x.php"> </script>  //async=true代表异步为真，异步请求
+
+---
+
+    <script>
+    function doResponse(data){
+    处理服务器端返回的data中的数据...
+    }
+
+    </script>
+
+<p>服务器端返回的数据形如：</p>
+<p>Content-Type:application/javascript</p>
+<p>doResponse({x:y, a:b});</p>
+<h1 id="9-jQuery中如何发起jsonp请求？"><a href="#9-jQuery中如何发起jsonp请求？" class="headerlink" title="9.jQuery中如何发起jsonp请求？"></a>9.jQuery中如何发起jsonp请求？</h1><p>1.XHR非跨域请求  $.getJSON(‘xx.php’)</p>
+<p>2.跨域请求: $.getJSON(‘跨域地址/x.php?callback=?’,function(data){..处理服务器返回的数据})</p>
+<pre><code>3.$.ajax({
+url:&apos;&apos;,
+
+datatype:&apos;jsonp&apos;,
+
+success:function(data){
+
+     error:function(){}
+     }
+    }) 
+</code></pre><h1 id="10-html5新特性："><a href="#10-html5新特性：" class="headerlink" title="10.html5新特性："></a>10.html5新特性：</h1><p>1.新的语义标签，2.增强型表单，3.视频和音频，4.Canvas绘图，svg绘图，5.地理定位，6拖放api,7.webWorker  8.webStorage,webSocket</p>
+<h1 id="11-函数自执行与块级作用域"><a href="#11-函数自执行与块级作用域" class="headerlink" title="11.函数自执行与块级作用域"></a>11.函数自执行与块级作用域</h1><p>在ES5中，没有块级作用域，因此我们常常使用函数自执行的方式来模仿块级作用域，这样就提供了一个独立的执行上下文，结合闭包，就为模块化提供了基础。</p>
+<pre><code>(function() {
+   // ...
+})();
+</code></pre><p>一个模块往往可以包括：私有变量、私有方法、公有变量、公有方法。</p>
+<pre><code>(function() {
+    // 私有变量
+    var age = 20;
+    var name = &apos;Tom&apos;;
+
+
+    // 私有方法
+    function getName() {
+        return `your name is ` + name;
+    }
+
+
+    // 共有方法
+    function getAge() {
+        return age;
+    }
+
+    // 将引用保存在外部执行环境的变量中，形成闭包，防止该执行环境被垃圾回收
+    window.getAge = getAge;
+})();
+</code></pre><h1 id="12-拖拽的原理"><a href="#12-拖拽的原理" class="headerlink" title="12.拖拽的原理"></a>12.拖拽的原理</h1><p>当事件触发时，我们可以通过事件对象获取到鼠标的精切位置。这是实现拖拽的关键。当鼠标按下(mousedown触发)时，我们需要记住鼠标的初始位置与目标元素的初始位置，我们的目标就是实现当鼠标移动时，目标元素也跟着移动，根据常理我们可以得出如下关系：</p>
+<pre><code>移动后的鼠标位置 - 鼠标初始位置 = 移动后的目标元素位置 - 目标元素的初始位置
+</code></pre><p>如果鼠标位置的差值我们用dis来表示，那么目标元素的位置就等于：</p>
+<pre><code>移动后目标元素的位置 = dis + 目标元素的初始位置
+</code></pre><p>通过事件对象，我们可以精确的知道鼠标的当前位置，因此当鼠标拖动(mousemove)时，我们可以不停的计算出鼠标移动的差值，以此来求出目标元素的当前位置。这个过程，就实现了拖拽。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;1-执行上下文：&quot;&gt;&lt;a href=&quot;#1-执行上下文：&quot; class=&quot;headerlink&quot; title=&quot;1.执行上下文：&quot;&gt;&lt;/a&gt;1.执行上下文：&lt;/h1&gt;&lt;p&gt;单线程&lt;/p&gt;
+&lt;p&gt;同步执行，只有栈顶的上下文处于执行中，其他上下文需要等待&lt;/p&gt;
+&lt;p
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>问题汇总</title>
+    <link href="http://yuelizhang.bid/2016/09/01/question/"/>
+    <id>http://yuelizhang.bid/2016/09/01/question/</id>
+    <published>2016-09-01T10:22:06.000Z</published>
+    <updated>2017-08-12T10:42:07.146Z</updated>
+    
+    <content type="html"><![CDATA[<p>1、描述一下你只做一个网页的工作流程。<br>1）根据需求，确定主题。透彻深入所做网站的核心功能和关键。<br>2）收集资料。从对比相同类型的网站（惯用而熟悉的样式，用户更乐意接受），参照别人可行的实现方法。<br>3）规划网站。抽离出类似的模块和可重用的部件。如果是响应式网站就需要设定断点，根据不同宽度屏幕设定样式。<br>4）设计数据库。<br>5）搭建基本的框架。引入重置样式表reset.css和字体样式表font.css，风格统一的图标还有后台需要用到的包。<br>6）编码和调试。注意统一命名和编码规范。当多人开发时，还需要制定规范文档。<br>7）上传测试。利用FTP工具，把网站发布到自己申请的主页存放服务器上。网站上传以后，你要在浏览器中打开自己的网站，逐页逐个链接的进行测试，发现问题，及时修改，然后再上传测试。<br>8）推广宣传 。不断宣传，提高网站的访问率和知名度。推广的方法有很多，例如到搜索引擎上注册、与别的网站交换链接、加入广告链等。<br>9）维护更新 。网站要注意经常维护更新内容，保持内容的新鲜，不要一做好就放在那儿不变了，只有不断地给它补充新的内容，才能够吸引住浏览者</p>
+<p>2、你如何对网站的文件和资源进行优化？</p>
+<p><a href="https://segmentfault.com/a/1190000002956639" target="_blank" rel="external">https://segmentfault.com/a/1190000002956639</a></p>
+<p>一共18条，很详细。几乎涵盖所有网站资源优化的内容。</p>
+<p>3、如何规避JavaScript多人开发函数重名问题？</p>
+<pre><code>闭包，沙箱模式
+js模块化mvc（数据层、表现层、控制层）
+seajs（如果了解的呢，可以说）
+变量转换成对象的属性
+对象化
+</code></pre><p>4、请尽可能详尽的解释AJAX的工作原理。</p>
+<p>Ajax的工作原理相当于在用户和服务器之间加了—个中间层(AJAX引擎),使用户操作与服务器响应异步化。并不是所有的用户请求都提交给服务器,像—些数据验证和数据处理等都交给Ajax引擎自己来做, 只有确定需要从服务器读取新数据时再由Ajax引擎代为向服务器提交请求。</p>
+<p>Ajax其核心有JavaScript、XMLHTTPRequest、DOM对象组成，通过XmlHttpRequest对象来向服务器发异步请求，从服务器获得数据，然后用JavaScript来操作DOM而更新页面。这其中最关键的一步就是从服务器获得请求数据。让我们来了解这几个对象。</p>
+<p>(1).XMLHTTPRequest对象</p>
+<p>Ajax的一个最大的特点是无需刷新页面便可向服务器传输或读写数据(又称无刷新更新页面),这一特点主要得益于XMLHTTP组件XMLHTTPRequest对象。</p>
+<p>(2).JavaScript</p>
+<p>JavaScript是一在浏览器中大量使用的编程语言。</p>
+<p>(3).DOM Document Object Model</p>
+<p>DOM是给HTML和XML文件使用的一组API。它提供了文件的结构表述，让你可以改变其中的內容及可见物。其本质是建立网页与Script或程序语言沟通的桥梁。所有WEB开发人员可操作及建立文件的属性、方法及事件都以对象来展现（例如，document就代表“文件本身“这个对像，table对象则代表HTML的表格对象等等）。这些对象可以由当今大多数的浏览器以Script来取用。一个用HTML或XHTML构建的网页也可以看作是一组结构化的数据，这些数据被封在DOM（Document Object Model）中，DOM提供了网页中各个对象的读写的支持。</p>
+<p>(4).XML</p>
+<p>可扩展的标记语言（Extensible Markup Language）具有一种开放的、可扩展的、可自描述的语言结构，它已经成为网上数据和文档传输的标准,用于其他应用程序交换数据 。</p>
+<p>(5).综合</p>
+<p>Ajax引擎，实际上是一个比较复杂的JavaScript应用程序，用来处理用户请求，读写服务器和更改DOM内容。JavaScript的Ajax引擎读取信息，并且互动地重写DOM，这使网页能无缝化重构，也就是在页面已经下载完毕后改变页面内容，这是我们一直在通过JavaScript和DOM在广泛使用的方法，但要使网页真正动态起来，不仅要内部的互动，还需要从外部获取数据，在以前，我们是让用户来输入数据并通过DOM来改变网页内容的，但现在，XMLHTTPRequest，可以让我们在不重载页面的情况下读写服务器上的数据，使用户的输入达到最少。</p>
+<p>Ajax使WEB中的界面与应用分离（也可以说是数据与呈现分离），而在以前两者是没有清晰的界限的，数据与呈现分离的分离，有利于分工合作、减少非技术人员对页面的修改造成的WEB应用程序错误、提高效率、也更加适用于现在的发布系统。也可以把以前的一些服务器负担的工作转嫁到客户端，利于客户端闲置的处理能力来处理。</p>
+<p>5、你使用过哪些JavaScript库？</p>
+<p>jQuery</p>
+<p>animate</p>
+<p>Bootstrap</p>
+<p>zepto</p>
+<p>artTemplate</p>
+<p>normalize：它在默认的HTML元素样式上提供了跨浏览器的高度一致性。</p>
+<p>Swiper</p>
+<p>fullpage：jQuery全屏滚动插件。</p>
+<p>了解更多：</p>
+<p><a href="https://www.evget.com/article/2013/9/22/19657.html" target="_blank" rel="external">https://www.evget.com/article/2013/9/22/19657.html</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;1、描述一下你只做一个网页的工作流程。&lt;br&gt;1）根据需求，确定主题。透彻深入所做网站的核心功能和关键。&lt;br&gt;2）收集资料。从对比相同类型的网站（惯用而熟悉的样式，用户更乐意接受），参照别人可行的实现方法。&lt;br&gt;3）规划网站。抽离出类似的模块和可重用的部件。如果是响应式
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>立志：有志者，事竟成</title>
+    <link href="http://yuelizhang.bid/2016/08/02/zhixiang/"/>
+    <id>http://yuelizhang.bid/2016/08/02/zhixiang/</id>
+    <published>2016-08-02T11:03:11.000Z</published>
+    <updated>2017-08-12T10:42:07.146Z</updated>
+    
+    <content type="html"><![CDATA[<p>立志：有志者，事竟成</p>
+<p>阳明说，“志不立，天下无可成之事。”朱熹也说，“为学须先立志。志既立，则学问可次第着力。立志不定，终不济事。”</p>
+<p>立志就是《大学》上讲的“知止”。所谓“知止而后有定”，立志就是知道你人生的终极目的是什么，用以终为始的思维开始你的奋斗历程。王阳明自己，从少年之时便立下志向，要像朱子那样成为圣人。 来贵州龙场前，王阳明已经年近不惑，刻苦求学了将近三十年。对于立志这件事，近三十年来王阳明自己深有体会，一个人如果没有确立自己的志向，就好像船没有了舵、马没有了缰绳，于是只能随波飘荡、四处奔逸，人生不知所终。</p>
+<p>立志者，为学之心也；为学者，立志之事也。</p>
+<p>在阳明这里，立志是学习的动力，学习是实现志向的过程。然而，人的志向有高有低，有善也有恶。阳明这里讲的立志，其实是在导人向善，要大家立一个真切为善之志，为君子之志。</p>
+<p>也就是说，在确立自己的志向之时，你要清楚自己所立的志向是君子之志还是小人之志。王阳明说，“立志成为圣人，就会成为圣人；立志成为贤人，就会成为贤人。”因此，无论你做什么，立志是首要的事情。</p>
+<p>另外，阳明讲“立志贵专一”。今日立一志，明日立一志，不会有任何成就。正所谓，有志者立长志，无志者常立志。王阳明打了一个比喻，立志就像种树，立下志向后，犹如在心中种下了一颗根苗，只管去浇灌它，总有一天这颗根苗会长成参天大树，而不要去想什么时候才能开花结果，多想无益。只要你坚定不移地朝着自己的志向奋斗，就一定会见到自己浇灌出来的丰富果实。</p>
+<p>作者：未晓研心</p>
+<p>链接：<a href="http://www.jianshu.com/p/d10a1821c479" target="_blank" rel="external">http://www.jianshu.com/p/d10a1821c479</a></p>
+<p>來源：简书</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;立志：有志者，事竟成&lt;/p&gt;
+&lt;p&gt;阳明说，“志不立，天下无可成之事。”朱熹也说，“为学须先立志。志既立，则学问可次第着力。立志不定，终不济事。”&lt;/p&gt;
+&lt;p&gt;立志就是《大学》上讲的“知止”。所谓“知止而后有定”，立志就是知道你人生的终极目的是什么，用以终为始的思维开始你
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>css3笔记</title>
+    <link href="http://yuelizhang.bid/2016/07/01/css3/"/>
+    <id>http://yuelizhang.bid/2016/07/01/css3/</id>
+    <published>2016-07-01T07:38:52.000Z</published>
+    <updated>2017-08-12T10:42:07.145Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="1、复杂选择器"><a href="#1、复杂选择器" class="headerlink" title="1、复杂选择器"></a>1、复杂选择器</h1><h1 id="1、兄弟选择器"><a href="#1、兄弟选择器" class="headerlink" title="1、兄弟选择器"></a>1、兄弟选择器</h1><pre><code>通过兄弟级别的位置关系来匹配页面元素
+ 注意，兄弟选择器，只能向后找，不能向前找
+ 语法：
+     相邻兄弟选择器：通过相邻（紧紧挨着的）位置关系匹配元素
+     选择器1+选择器2
+     如：div+p   #top+.important
+             通用兄弟选择器：用于匹配某元素后面所有的兄弟元素
+     选择器1~选择器2
+         如#d1~div
+</code></pre><h1 id="2、属性选择器"><a href="#2、属性选择器" class="headerlink" title="2、属性选择器"></a>2、属性选择器</h1><pre><code>通过元素所附带的属性及其值来匹配页面中的元素
+语法：
+    基础属性选择器  [attr]
+        匹配页面中的有附带attr属性的元素
+    elem[attr]
+        elem:表示任意元素名称
+        attr:表示任意属性名称
+        匹配页面中附带attr属性的elem元素
+        如：div[id]:匹配页面中所有附带id属性的div元素
+    [attr1][attr2][attr3]
+        匹配页面中同时附带attr1和attr2属性的所有元素
+        如 input[name][hype]
+    [attr=value]
+        匹配页面中所有attr属性的值为value的元素
+        如input[type=text]
+    [class~=value]
+        主要使用在多类选择器上，匹配页面中class属性值中包含value选择器的元素
+    [attr^=value]
+        匹配以value值作为开始的attr属性的元素
+    [attr$=value]
+        匹配以value值作为结束的attr属性的元素
+    [attr*=value]
+        匹配attr属性值中包含value字符的所有元素
+</code></pre><h1 id="3、伪类选择器"><a href="#3、伪类选择器" class="headerlink" title="3、伪类选择器"></a>3、伪类选择器</h1><pre><code>目标伪类
+    突出显示活动的HTML锚元素
+    语法： ：target
+结构伪类
+    通过元素之间的结构关系来匹配元素
+    ：first-child     获取属于其父元素中的首个子元素
+    ：last-child     获取属于其父元素中的尾（最后）子元素
+    :nth-child(N)  获取属于其父元素中的第N个子元素
+    ：empty   空的，匹配没有子元素的元素，包含文本
+    ：only-child   匹配属于其父元素中的唯一子元素
+否定伪类
+    把匹配某选择器元素排除出去
+    ：not(选择器 )
+</code></pre><h1 id="4、伪元素选择器"><a href="#4、伪元素选择器" class="headerlink" title="4、伪元素选择器"></a>4、伪元素选择器</h1><pre><code>伪类与伪元素
+    伪类：匹配元素不同的状态
+    伪元素：是匹配元素中的内容
+语法：
+    ：first-letter
+    ::first-letter  匹配某元素的首字符
+    ：first-line    匹配某元素的首行字符
+    ：：selection 匹配用户选取的内容部分
+：和：：区别
+    在CSS2.1中，伪类选择器和仿元素选择器都是用：来表示
+    在CSS3中，所有伪类选择器用：表示，所有的伪元素选择器用：：表示
+</code></pre><h1 id="2、内容生成"><a href="#2、内容生成" class="headerlink" title="2、内容生成"></a>2、内容生成</h1><pre><code>通过CSS动态的向某个元素的内容区域之前、之后增加一部分内容
+伪元素选择器
+    ：before   定位到元素内容区域之前
+    ：after    定位到元素内容区域之后
+语法：
+    属性：content
+    取值：普通文本
+         图像，url(...)
+         计数器
+问题处理：
+    外边距溢出问题
+        为父元素添加边框
+        使用父元素的内边距取代子元素的外边距
+        在父元素的第一个或最后一个子元素位置处增加一个空的table
+    浮动元素父元素的高度问题
+</code></pre><h1 id="3、弹性布局"><a href="#3、弹性布局" class="headerlink" title="3、弹性布局"></a>3、弹性布局</h1><pre><code>flexible box,可伸缩布局，为普通布局带来更大的灵活性
+基本概念‘
+    flex容器：简称容器，将元素设置为flex容器后，其子元素允许实现灵活的位置摆放
+    flex项目：简称项目，存放在flex容器中的内容
+
+语法：
+    容器：display
+        取值：flex 将块级元素变为flex容器
+              inline-flex  将行内元素变为flex容器
+        注意：将元素设置为flex布局后，子元素的float,clear,vertical-align属性将失去作用
+    容器属性;
+        该组属性要添加在容器元素上，控制子元素的位置
+        flex-direction  决定主轴的方向（main-axsis）
+            取值：
+                row  主轴为水平方向的轴，起点在容器左端，默认值
+                row-reverse 主轴为水平方向的轴，起点在容器右端
+                column  主轴为交叉轴，起点在容器的顶端
+                column-reverse 主轴为交叉轴，起点在容器的底端
+        flex-wrap   当一条轴线（一行）排列不下时，子元素将如何换行
+            取值：
+                nowrap     默认值，不换行
+                wrap        换行
+                wrap-reverse  反方向换行
+        flex-flow   dirextion和wrap的缩写方式
+            取值：
+                row nowrap 默认值
+                direction wrap
+        justify-content   定义项目在主轴上的对齐方式
+            取值：
+                flex-start   主轴起点对齐
+                flex-end   主轴终点对齐
+                center    居中对齐
+                space-between  两端对齐，项目之间的距离是相等的
+                space-around  每个项目两侧间距是相等的 项目与项目之间的间距，要比项目与父元素之间的间距大一倍
+        align-items  定义项目在交叉轴的对齐方式（单行项目有效）
+            取值：
+                flex-start  交叉轴起点对齐
+                flex-end   交叉轴终点对齐
+                center     交叉轴中间对齐
+                baseline   基线对齐，以所有项目中的第一行文本为准
+                stretch    默认值，如果项目不设置高度或为auto时，那么项目将占满整个容器的高度
+        align-content  定义了多跟轴线的对齐方式，如果项目只一根轴线，该属性无效
+            取值：
+                flex-start   交叉轴顶端对齐
+                flex-end    交叉轴底端对齐
+                center      交叉轴中间对齐
+                space-between  与交叉轴两端对齐
+                space-around     项目与项目间对齐
+    项目属性：
+        该组属性主要设置于项目中
+        order  定义项目在排列顺序，值越小，越靠前，默认为0
+        flex-grow  指定项目的放大比例，默认为0，即不放大
+        flex-shrink 指定项目的缩小比例，默认为1，即空间不足时，等比缩小，为0时不缩小
+        flex-basis  指定项目占据主轴的剩余空间大小 auto 默认值，项目本身大小
+        flex  是flex-grow,flex-shrink,flex-basis 的简写模式
+            取值，auto  相当于1  1   auto
+                 none  相当于0 0  auto
+                 flex-grow【,flex-shrink,flex-basis】
+        align-self  允许定义当个项目与其他项目不一样的交叉轴对齐方式（类似于align-items）,能够覆盖align-items的效果
+            取值： auto 默认值，使用
+                  flex-start   主轴起点对齐
+                flex-end   主轴终点对齐
+                center    居中对齐
+                base-line
+                stretch
+</code></pre><h1 id="4、CSS-Hack-兼容性"><a href="#4、CSS-Hack-兼容性" class="headerlink" title="4、CSS Hack 兼容性"></a>4、CSS Hack 兼容性</h1><pre><code>标准模式和混杂模式和准标准模式
+IE6之前，没有兼容性说法
+IE6之后，各个浏览器追求标准统一，开始支持标准，IE的其它浏览器要向前兼容，所以出现各种模式
+    混杂模式  无标准可言
+        编写代码时，不写&lt;!doctylpe&gt;就是混杂模式，采用的是IE5.5的内核进行渲染
+    标准模式  安全支持
+    准标准模式，即支持标准，也同时向前兼容非标准代码
+如何根据不同的浏览器编写不同的css
+    css类内部Hack
+        在属性名称前和值添加前后缀以便识别不同的浏览器
+    选择器Hack
+        在选择器前添加特殊标识以便识别不同的浏览器
+    头部引用hack
+        通过html的条件注释来判断浏览器版本，去执行不同的CSS
+        条件注释
+            条件：
+                gt:判断当前浏览器是否大于指定定版本
+                gte：判断当前浏览器是否大于等于指定定版本
+                it:   判断当前浏览器是否小于指定版本
+                ite： 判断当前浏览器是否小于等于指定版本
+                !：   判断当前浏览器是否为非指定版本
+                    &lt;!--[if !IE 8]&gt;
+                        该段内容在除IE8以外浏览器中显示
+                    &lt;![endif]--&gt;
+</code></pre><h1 id="5、转换"><a href="#5、转换" class="headerlink" title="5、转换"></a>5、转换</h1><pre><code>说明：改变元素在页面中的形状，角度 大小 位置的一种效果
+    允许进行2D和3D方向的转换
+    2D转换：在平面中进行的操作
+    3D转换：在空间中进行的操作
+转换属性：
+    rtansform:为元素应用2D或3D转换效果
+        取值：none;  没有效果
+            transform-functions:一组转换函数
+                位移转换函数：translate()
+                改变形状函数：skew()
+                注意：如果指定多个转换函数的话中间用空格隔开
+    转换原点：
+        属性：transform-origin
+        默认：转换原点在元素中心处
+        取值：轴线给值
+            两个轴线值：X Y
+            三个轴线值：X Y Z
+2D转换
+    位移：改变元素在页面中的位置
+        语法：transform
+            fransform(x)  改变元素在X轴的位置
+            fransform(X ,Y)  改变元素在两轴的位置
+            fransformX(X) 只在X轴上位置移动
+            fransformY(Y)  只在Y轴上位置移动
+    缩放： 改变元素在页面中的大小】
+        语法：transform
+            scale(value)  表示两轴等比缩放
+                取值：默认  为1
+                    放大   为大于1的数值
+                    缩小   为0~1之间小数
+                    返转   负数
+            sacle(X,Y)
+            saclex(y)
+            sacley(y)
+    旋转：改变元素在页面上的角度，要根据原点实现转换效果
+        语法：transform
+            rotate(ndeg)
+                n 取值正，顺时针旋转
+                n 取值负，逆时针旋转
+                deg 为角度
+                0~360范围
+        注意：转换原点问题
+            元素坐标轴也跟着旋转
+    倾斜：改变元素在页面中形状
+        语法：transform
+            skew(xdeg)  横向倾斜指定度数
+                x 取值正，y轴逆时针倾斜一定角度
+                  取值负，Y轴顺时针倾斜一定角度
+            skew(xdeg,ydeg)
+            skewx(xdeg)
+            skewy(ydeg)
+3D转换
+    感觉空间
+    属性：perspetive 假定人眼到投射平面的距离
+    注意：该属性要放在3D转换元素的父元素上
+        兼容性chrome和safari需要加前缀
+            -wedkit-perspective:500px;
+    旋转：以X轴中心轴旋转
+            rotatex(xdeg)
+          以Y轴中心轴旋转
+            rotatey(ydeg)
+          以Z轴中心轴旋转
+            rotatez(zdeg)
+        取值：正  顺时针
+            负   逆时针
+        以多个轴同时进行旋转
+            rotate3d(x ,y, z ,ndeg)
+                x y z 取值为1，该轴参与旋转
+                x y z  取值为0 ，该轴不参与旋转
+    位移：改变元素在Z轴上的位置
+        语法：transform
+            translatez(z)
+
+            transform-style
+                取值：flat  默认值，子元素不保留3D位置
+                     preserve-3D  子元素保留3D位置
+</code></pre><h1 id="6、过渡"><a href="#6、过渡" class="headerlink" title="6、过渡"></a>6、过渡</h1><pre><code>作用效果：使得css属性值在一段时间内平缓变化的效果
+要素与属性：
+    指定过渡属性：指定哪个属性值在变化时使用过渡效果展示
+        transition-property: 属性名称（width）
+                      all   全部属性
+                      none
+        允许设置过渡效果的属性：
+            颜色属性
+            渐变属性
+            取值为数字属性
+            转换属性 transition-property:transform;
+            visibility属性
+            阴影属性
+    指定过渡时长
+        transition-duration: 以S、MS为单位数值
+    指定过渡时速曲线函数  可选
+        transition-timing-function
+            取值：ease  默认值，慢速开始，快速变快，慢速结束
+                 linear  匀速进行
+                 ease-in   慢速开始，快速结束
+                 ease-out  快速开始，慢速结束
+                 ease-in-out  慢速开始和结束，先加速后减速
+    指定过渡的延迟时间   可选
+        transition-delay
+            取值：以S或MS做为单位
+    简写属性：transition:prop duration  timing-fun delay;
+        多个过渡效果
+            transition:prop1 duration1 timing-fun1 delay1,prop2 duration2 timing-fun2 delay2........;
+触发过渡条件
+    将过渡编写在元素声明的样式中，由:hover,:active等，进行触发,
+    将过渡编写在:hover,:active伪类中
+</code></pre><h1 id="7、动画"><a href="#7、动画" class="headerlink" title="7、动画"></a>7、动画</h1><pre><code>使元素从一种样式逐渐变化为另一种样式的过程，与动画相关的属性，增加浏览器前缀
+动画使用步骤
+    声明动画
+        指定动画名称
+        指定动画中的关键帧（keyframes）
+            时间点（以百分比描述时间）
+            元素状态（CSS样式）
+    为元素调用动画
+        指定调用动画的名称以及执行时长
+语法：
+    声明动画     注意前缀，兼容性问题
+        &lt;style&gt;
+            @keyframes 名称{
+                0%{   动画开始时，元素的状态   }
+                。。。。
+                100%{  动画结束时，元素的状态  }
+            }
+        &lt;/style&gt;
+    调用动画(animation)
+        animation-name  指定调用动画名称
+        animation-duration   指定动画周期时长，以S或MS为单位
+        animation-timing-function  指定动画的速度时间出线函数
+            取值：ease  默认值，慢速开始，快速变快，慢速结束
+                 linear  匀速进行
+                 ease-in   慢速开始，快速结束
+                 ease-out  快速开始，慢速结束
+                 ease-in-out  慢速开始和结束，先加速后减速
+        animation-delay  指定动画延迟时间
+        animation-iteration-count  指定动画播放次数
+            取值：默认1次，具体数值
+                infinite:无限次播放
+        animation-direction  指定动画的播放方向
+            取值：normal  从0%~100%
+                reverse  从100%~0%
+                alternate  轮流来回播放 奇数 0%~100%
+                                 偶数 100%~0%
+        animation  简写方式
+            取值：name  duration  timing-fun delay  iteration-count direction;
+        animation-fill-mode  指定动画播放之前、之后的填充模式
+            取值：none  默认值
+                 forwards  动画播放完成后，保持在最后一帧的位置
+                 backwards 动画播放前，延迟时间内，动画保持在开始第一帧上的位置
+                 both 同时应用在开始和最后的位置帧上
+        animation-play-state  动画播放状态
+            取值：paused 暂停
+                 running 播放
+</code></pre>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;1、复杂选择器&quot;&gt;&lt;a href=&quot;#1、复杂选择器&quot; class=&quot;headerlink&quot; title=&quot;1、复杂选择器&quot;&gt;&lt;/a&gt;1、复杂选择器&lt;/h1&gt;&lt;h1 id=&quot;1、兄弟选择器&quot;&gt;&lt;a href=&quot;#1、兄弟选择器&quot; class=&quot;headerlink
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>DOM，BOM笔记要点</title>
+    <link href="http://yuelizhang.bid/2016/06/06/DOM-BOM/"/>
+    <id>http://yuelizhang.bid/2016/06/06/DOM-BOM/</id>
+    <published>2016-06-06T01:01:30.000Z</published>
+    <updated>2017-08-12T10:42:07.144Z</updated>
+    
+    <content type="html"><![CDATA[<p>DOM: Document Object Model</p>
+<h1 id="DOM是专门操作网页内容的API标准"><a href="#DOM是专门操作网页内容的API标准" class="headerlink" title="DOM是专门操作网页内容的API标准"></a>DOM是专门操作网页内容的API标准</h1><pre><code>为什么: 早起js操作不同浏览器的API没有标准，有严重兼容性问题
+所以，W3C制定了统一的操作网页内容的API标准,所有浏览器厂商都遵照执行。
+结果，使用DOM API操作网页内容，几乎100%兼容所有浏览器
+何时: 只要操作网页内容，就用DOM API查找, 修改(内容,属性,样式), 添加, 删除.
+DOM Tree:
+
+什么是: 网页中一切内容在内存中都是以树形结构存储的
+       网页中每一项内容都是树上的一个节点对象
+       包括: 元素, 文字, 属性...
+       树只有一个根节点: document, 包含了所有网页内容
+Node: 每个节点都是一个node类型的对象
+      node是所有节点的父类型
+</code></pre><h1 id="三大公共-nodeType-nodeName-nodeValue"><a href="#三大公共-nodeType-nodeName-nodeValue" class="headerlink" title="三大公共: nodeType nodeName nodeValue"></a>三大公共: nodeType nodeName nodeValue</h1><pre><code>nodeType: 节点的类型
+  值: document   9
+     element     1
+     attribute     2
+     text         3
+  何时: 只要判断节点类型，就用nodeType
+        因为不同类型的节点，能执行的操作是不一样的
+  问题: 不能进一步区分元素的名称
+  解决:
+nodeName: 节点的名称
+  值: document   #document
+     element    全大写的标签名
+     attribute    属性名
+     text        #text
+  何时: 只要细致鉴别元素的标签名时
+    强调: nodeName返回的是全大写的标签名
+nodeValue: 节点值:
+  值: document   null
+     element     null
+     attribute     属性值
+     text         文本内容
+</code></pre><h1 id="2、查找-4种"><a href="#2、查找-4种" class="headerlink" title="2、查找: 4种:"></a>2、查找: 4种:</h1><pre><code>  a. 不需要查找，可直接获得的元素
+        html   document.documentElement
+        head   document.head
+        body   document.body
+  b. 按节点间关系查找:
+节点树: 包含所有节点: 元素和文本
+  1. 父子: elem.parentNode  找elem的父节点
+        elem.childNodes  找elem的所有*直接*子节点
+            返回，所有直接子节点组成的集合(类数组)
+        elem.firstChild   找elem的第一个*直接*子节点
+        elem.lastChild   找elem的最后一个*直接*子节点
+  2. 兄弟: elem.previousSibling 找elem的前一个兄弟
+        elem.nextSibling   找elem的下一个兄弟
+ 何时: 前提: 已经获得了一个节点
+      要找周围临近的节点时
+ 问题: 连看不见的空字符，也算文本节点——干扰
+ 解决:
+元素树: 仅包含元素节点的树结构
+       不是一棵新树，仅是节点树的子集
+ 1. 父子: elem.parentElement  找elem的父元素
+        elem.children  找elem的所有*直接*子元素
+            返回，所有直接子元素组成的集合(类数组)
+        elem.firstElementChild   第一个*直接*子元素
+        elem.lastElementChild   最后一个*直接*子元素
+ 2. 兄弟:
+   elem.previousElementSibling 找elem的前一个兄弟元素
+   elem.nextElementSibling   找elem的下一个兄弟元素
+ 何时: 只要仅关心元素节点，不关心文本节点时
+ 问题: IE9+
+ 强调: childNodes和children返回的都是动态集合！
+   凡是遍历动态集合，都要先缓存元素个数，再遍历
+   for(var i=0,len= childNodes.length;i&lt;len;i++)
+     不会导致反复查找DOM树
+</code></pre><h1 id="3、-按HTML查找"><a href="#3、-按HTML查找" class="headerlink" title="3、 按HTML查找:"></a>3、 按HTML查找:</h1><pre><code>    优: 范围可大可小,可设置条件
+a、按id查找: var elem=document.getElementById(&quot;id&quot;)
+  强调: 1. 只能在document对象上调用
+       2. 返回一个元素对象
+b、按标签名查找:
+    var elems=parent.getElementsByTagName(&quot;标签名&quot;);
+  强调: 1. 可在任意父元素上
+       2. 返回多个元素组成的集合
+       3. 不但查找直接子元素，还查找所有后代元素
+c、按name属性查找: 了解
+   专门找表单中有name属性的表单元素
+    var elems=document.getElementsByName(&quot;name&quot;)
+    强调: 1. 只能在document上调用
+         2. 返回多个元素组成的集合
+d、按class属性查找:
+    var elems=parent.getElementsByClassName(&quot;class&quot;)
+    强调: 1. 可在任意父元素上调用
+         2. 返回多个元素组成的集合
+         3. 不要求完整匹配，只要包含即可！
+缺: 每次只能按一个条件查找
+   如果条件复杂，就无法一句话获得想要的元素
+</code></pre><h1 id="4、-按选择器查找"><a href="#4、-按选择器查找" class="headerlink" title="4、 按选择器查找:"></a>4、 按选择器查找:</h1><pre><code>a. 只找一个元素:
+  var elem=parent.querySelector(&quot;selector&quot;);
+b. 找多个元素
+  var elems=parent.querySelectorAll(&quot;selector&quot;);
+</code></pre><h1 id="5、-总结"><a href="#5、-总结" class="headerlink" title="5、 总结:"></a>5、 总结:</h1><pre><code> A首次查找:
+    1. 如果条件简单: 按HTML查找: id, 标签, className
+    2. 如果条件复杂: 按选择器查找:
+ B已经获得一个元素，找周围相邻: 按节点间关系
+鄙视: 按HTML查找 vs 按选择器查找
+ 1.使用的难易程度: 当条件复杂时:
+    按选择器查找——简单, 按HTML查找——繁琐
+ 2.返回值:
+    getElementsByTagName() 返回多个元素的*动态*集合
+      什么是动态集合: 不实际存储对象的属性值，每次访问，都要重新查找DOM树
+    querySelectorAll()  返回多个元素的*非动态*集合
+      什么是非动态集合: 实际存储对象的所有属性值，即使反复访问集合，也不会导致反复查找DOM树
+ 3.单次效率:
+    按HTML查找——效率高!
+    按选择器查找——效率低
+</code></pre><h1 id="6、-修改-内容-属性-样式"><a href="#6、-修改-内容-属性-样式" class="headerlink" title="6、 修改: (内容, 属性, 样式)"></a>6、 修改: (内容, 属性, 样式)</h1><pre><code>1. 修改:
+标准属性: 2种:
+  1. 核心DOM: 操作一切结构化文档的API(HTML，XML)
+    elem.attributes集合: 保存了当前元素的所有属性节点
+    获取属性值: elem.getAttribute(&quot;属性名&quot;)
+    修改属性值: elem.setAttribute(&quot;属性名&quot;,&quot;值&quot;)
+    判断是否包含属性: elem.hasAttribute(&quot;属性名&quot;)
+    移除属性: elem.removeAttribute(&quot;属性名&quot;)
+  2. HTML DOM: 对部分常用DOM API的简化版本
+     HTML DOM将标准属性都预定义在元素对象中
+    获取属性值: elem.属性名
+    修改属性值: elem.属性名=&quot;值&quot;;
+    判断是否包含属性: elem.属性名===&quot;&quot; 不包含
+    移除属性: elem.属性名=&quot;&quot;
+    特例: class属性和ES标准中的class重名
+          -&gt; DOM -&gt; className
+    自定义属性: 比如: data-toggle=&quot;dropdown&quot;
+      HTML DOM不能操作自定义属性
+      暂时只能用核心DOM操作:
+    三大状态: disabled  selected   checked
+      核心DOM无法操作三大状态属性
+      HTMLDOM: elem.disabled elem.selected  elem.checked
+            值都是bool类型true/false
+</code></pre><h1 id="6-1、修改css样式"><a href="#6-1、修改css样式" class="headerlink" title="6.1、修改css样式:"></a>6.1、修改css样式:</h1><pre><code>1. 仅获取/修改内联样式:  elem.style.css属性名
+  问题1: css属性名有的带-
+  解决: 所有css属性名都要去横线变驼峰
+     比如: background-color: backgroundColor
+          list-style-type: listStyleType
+  问题2: 所有数值类型的属性值都是带单位的字符串
+  解决: 获取时: 都要去单位，转数值
+        修改时: 将单位拼回数值
+  问题3: 仅能获得内联样式, 无法获得样式表中的样式
+  解决: 计算后的样式: 最终应用到元素上的完整样式
+    何时: 只要希望获得元素完整的样式时
+    如何: 2步:
+      1. 获得完整样式对象style
+        var style=getComputedStyle(elem)
+      2. 获得style对象中的css属性
+        style.css属性名
+     强调: style对象中的样式都是只读
+结论: 1. 获取样式: getComputedStyle
+     2. 修改样式: elem.style.css属性名
+2. 运行时修改样式表中的样式:
+  Step1: 获得样式表对象:
+   var sheet=document.styleSheets[i]
+  Step2: 获得样式表对象中某个CSSRule(一个选择器{})
+   var rule=sheet.cssRules[i]
+  Step3: 修改rule.style.css属性名=值
+</code></pre><h1 id="7、-添加和删除"><a href="#7、-添加和删除" class="headerlink" title="7、 添加和删除:"></a>7、 添加和删除:</h1><pre><code>添加: 3步:
+ Step1: 创建空元素:
+  var a=document.createElement(&quot;a&quot;);
+  &lt;a&gt;&lt;/a&gt;
+ Step2: 设置关键属性:
+     a.href=&quot;http://tmooc.cn&quot;
+     a.innerHTML=&quot;go to tmooc&quot;;
+  &lt;a href=&quot;http://tmooc.cn&quot;&gt;go to tmooc&lt;/a&gt;
+ Step3: 将元素添加到DOM树: 3种:
+   1. 末尾追加: parent.appendChild(child)
+   2. 中间插入: parent.insertBefore(child, oldChild)
+   3. 替换: parent.replaceChild(child, oldChild)
+</code></pre><h1 id="优化-尽量少的修改DOM树"><a href="#优化-尽量少的修改DOM树" class="headerlink" title="优化: 尽量少的修改DOM树"></a>优化: 尽量少的修改DOM树</h1><pre><code>原因: 页面加载过程:
+  html -&gt; DOM Tree(松树)
+           ↓
+        render Tree(圣诞树)-&gt; layout(计算绝对布局)-&gt;paint
+           ↑                 最耗时
+  css  -&gt; cssRules(装饰品)
+  每次修改DOM树，都会导致重新layout，耗时。
+如何: 2种:
+ 1. 如果同时添加父元素和子元素时，应该先在内存将子元素都添加到父元素中，再将父元素一次性整体添加到DOM树
+    结果: 只触发一次layout
+</code></pre><h1 id="1、-HTML-DOM-常用对象-对常用HTML元素操作的简化"><a href="#1、-HTML-DOM-常用对象-对常用HTML元素操作的简化" class="headerlink" title="1、 HTML DOM 常用对象: 对常用HTML元素操作的简化"></a>1、 HTML DOM 常用对象: 对常用HTML元素操作的简化</h1><pre><code>Select: 代表页面上的一个select元素
+ 属性: select.value 当前选中项的value
+                 没有value，就返回选中项的内容
+      select.options 保存select下所有option元素对象
+        相当于: select.getElementsByTagName(&quot;option&quot;)
+        select.options.length 保存select下option的个数
+        清空select下所有option: select.options.length=0;
+      select.length 等效于select.options.length
+        清空select下所有option: select.length=0;
+                               select.innerHTML=&quot;&quot;;
+      select.selectedIndex 当前选中项的下标
+  事件: onchange 当选中项发生改变时
+  方法: select.add(option) 向select中添加一个option
+         相当于: select.appendChild(option)
+         不支持文档片段
+       select.remove(i) 移除select中i位置的一个option
+Option: 代表页面上的一个option元素
+  创建: var opt=new Option(text,value);
+     创建一个option对象，同时设置opt的内容为text，设置opt的值为value
+     相当于: var opt=document.createElement(&quot;option&quot;);
+            opt.innerHTML=text;
+            opt.value=value;
+  属性: .text 代替.innerHTML
+       .index  表示当前option在select下的下标位置
+</code></pre><h1 id="Table-代表网页中一个table元素"><a href="#Table-代表网页中一个table元素" class="headerlink" title="Table: 代表网页中一个table元素"></a>Table: 代表网页中一个table元素</h1><pre><code> 管着行分组：
+   添加行分组: var 行分组=table.createTHead|TBody|TFoot();
+       强调: 即创建，同时又将行分组添加到table
+   删除行分组: table.deleteTHead|TFoot()
+   获取行分组: table.tHead|tFoot
+              table.tBodies[i]
+行分组: THead TBody TFoot
+  管着行:
+   添加行: var tr=行分组.insertRow(i)
+       在行分组中i位置插入一个新行
+       强调: 中间插入行，原i位置的行向后顺移
+       固定套路: 1. 末尾追加一个新行: 行分组.insertRow()
+                2. 开头插入: 行分组.insertRow(0)
+   删除行: 行分组.deleteRow(i)
+       删除行分组中第i行
+       强调: i是当前行在行分组内的相对下标位置
+   获取行: 行分组.rows
+
+行: tr
+  管着td:
+    添加td: var td=tr.insertCell(i);
+        省略i表示右侧末尾追加
+        insertCell不支持添加th，只能添加td
+    删除td: tr.deleteCell(i);
+    获取td: tr.cells
+
+删除行:
+ tr上都有一个属性: tr.rowIndex 行在整个表的绝对下标
+ 问题：行分组，无法使用tr.rowIndex删除行。
+ 解决: table.deleteRow(tr.rowIndex)
+ 总结: 今后，删除行都用table.deleteRow(tr.rowIndex)
+</code></pre><h1 id="form-代表页面上一个表单元素"><a href="#form-代表页面上一个表单元素" class="headerlink" title="form: 代表页面上一个表单元素"></a>form: 代表页面上一个表单元素</h1><pre><code> 获取: var form=document.forms[i/id]
+ 属性: form.elements 保存了表单中所有表单元素的数组
+        包括: input   select   textarea  button
+      form.elements.length 获得表单中表单元素的个数
+      form.length =&gt; form.elements.length
+ 方法: form.submit();  用于手动提交表单
+ 事件: form.onsubmit  以任何方式提交表单之前自动触发
+          常用于在提交之前，验证所有表单元素的内容
+表单元素:
+ 获取: var elem=form.elements[i/id/name]
+        简写: 如果表单元素有name属性: form.name
+ 方法: elem.focus() 让elem获得焦点
+      elem.blur()  让elem失去焦点
+
+Image: 代表页面上一个img元素
+  创建: var img=new Image();
+</code></pre><h1 id="DOM总结-查找-gt-绑定事件-gt-查找-gt-修改-添加-删除"><a href="#DOM总结-查找-gt-绑定事件-gt-查找-gt-修改-添加-删除" class="headerlink" title="DOM总结: 查找-&gt;绑定事件-&gt;查找-&gt;修改/添加/删除"></a>DOM总结: 查找-&gt;绑定事件-&gt;查找-&gt;修改/添加/删除</h1><pre><code>查找: 4种:
+  1. 不需要查找可直接获得: html  head  body  form
+  2. 节点间关系: 节点树/元素树
+      鄙视: 递归遍历
+  3. 按HTML: 4种: ById, ByTagName, ByName, ByClassName
+  4. 按选择器: 2种:
+      只找一个: querySelector()
+      找多个: querySelectorAll()
+修改:
+  内容: .innerHTML  .textContent/.innerText  .value
+  属性:
+    1. 标准属性: 1. 核心DOM; 2. HTML DOM
+    2. 自定义属性: 核心DOM
+    3. 状态属性: HTML DOM
+  样式:
+    修改: elem.style.css属性=值
+    获取: var style=getComputedStyle(elem)
+         style.css属性 ——只读
+    可通过修改class属性批量应用修改多个css属性
+添加: 3步:
+   1. createElement,
+   2.设置关键属性,
+   3. appendChild/insertBefore/replaceChild
+  优化: 尽量少的操作DOM树
+  如何: 2种:
+   1. 同时添加父子元素: 先将子元素加入父元素，再将父元素整体添加到页面
+   2. 同时添加多个平级子元素: fragment
+删除: parent.removeChild(child)
+HTML DOM: Select/Option  Table/...  From/Element  Image
+过渡动画: 2步:
+  css中: 添加transition
+  js中: 修改css属性值
+   不支持transition: display  zIndex
+   支持: width  height  opacity   bottom/top/left/right ...
+</code></pre><h1 id="2、BOM-Browser-Object-Model"><a href="#2、BOM-Browser-Object-Model" class="headerlink" title="2、BOM: Browser Object Model"></a>2、BOM: Browser Object Model</h1><pre><code>什么是: 专门操作浏览器窗口的API
+比如: alert prompt confirm
+问题: 1. 没有标准——兼容性问题;
+     2. 不可定制
+window对象: 2个角色:
+  1. 代替ES中的Global充当全局作用域对象
+  2. 封装所有BOM和DOM的API
+
+打开超链接: 4种:
+  1. 在当前窗口打开，可后退
+    html: &lt;a href=&quot;url&quot; target=&quot;_self&quot;&gt;&lt;/a&gt;
+    js: /*window.*/open(&quot;url&quot;,&quot;_self&quot;)
+  2. 在当前窗口打开，不可后退
+    js: location.replace(&quot;url&quot;);
+       用新url代替history中当前url，结果: 无法后退
+  3. 在新窗口打开，可打开多个
+    html: &lt;a href=&quot;url&quot; target=&quot;_blank&quot;&gt;&lt;/a&gt;
+    js: open(&quot;url&quot;,&quot;_blank&quot;)
+  4. 在新窗口打开，只能打开一个
+    html: &lt;a href=&quot;url&quot; target=&quot;自定义name属性值&quot;&gt;&lt;/a&gt;
+    js: open(&quot;url&quot;,&quot;自定义name属性值&quot;)
+    原理: 内存中每个窗口都有一个唯一的name属性来唯一标示一个窗口
+      浏览器规定，相同name属性的窗口只能打开一个
+    其实: html中的target属性就是在设置新窗口的name属性值。
+    如果target中使用自定义的窗口名，则只能打开一个
+    预定义:
+      _self: 默认使用当前窗口自己的name属性
+           结果，新窗口覆盖当前窗口
+      _blank: 意为不指定窗口名, 浏览器会随机生成不同的窗口名。
+           结果: 每次打开新窗口都随机生成不同的name
+                 结果: 可打开任意多个
+</code></pre><h1 id="定时器-2种"><a href="#定时器-2种" class="headerlink" title="定时器: 2种:"></a>定时器: 2种:</h1><pre><code>1. 周期性定时器:
+  什么是: 让程序按照指定时间间隔，反复执行一项任务
+  何时: 只要让程序按照指定时间间隔，反复执行一项任务
+  如何: 3件事:
+    1. 任务函数: 让定时器反复调用的函数
+    2. 启动定时器:
+     var timer=setInterval(任务函数, 间隔的毫秒数)
+    3. 停止定时器: clearInterval(timer)
+        问题: timer中的序号会残留在timer变量中
+        解决: 停止定时器后，主动清空timer
+             timer=null
+  停止定时器: 2种:
+    1. 用户手动停止定时器: 用按钮调用clearInterval
+    2. 自动停止定时器: 在任务函数中:
+       1. 设定临界条件
+       2. 如果达到临界条件就自动调用clearInterval
+
+2. 一次性定时器:
+ 什么是: 让程序先等待一段时间，再自动执行一次任务
+         执行一次后，定时器自动停止
+ 何时: 只要先等待，再执行一次任务
+ 如何: 三件事
+   1. 任务函数
+   2. 启动: var timer=setTimeout(任务函数, 等待的毫秒数)
+   3. 停止: clearTimeout(timer)
+鄙视: 定时器中的函数，只能在主程序所有程序执行后才能执行
+
+for(var i=0;i&lt;3;i++){
+  setTimeout(function(){
+    console.log(i);
+  },0);
+}//结果: 3 3 3
+//alert(&quot;Hello&quot;) 如果不点确定，则永远不输出333
+</code></pre><h1 id="window"><a href="#window" class="headerlink" title="window:"></a>window:</h1><h1 id="history，location，document，navigator，screen，event"><a href="#history，location，document，navigator，screen，event" class="headerlink" title="history，location，document，navigator，screen，event"></a>history，location，document，navigator，screen，event</h1><pre><code>history: 保存当前窗口打开后，成功访问过的历史记录的栈
+  history封装的非常严密
+  只能前进，后退，刷新: history.go(n)
+   前进: go(1)  后退:go(-1)  刷新:go(0)
+
+location: 专门保存当前窗口正在打开的url的对象
+ 属性: location.href 保存了完整的url
+        在当前窗口打开: location.href=新url
+      location.protocol: 协议
+            .host: 主机名+端口号
+            .hostname: 主机名
+            .port: 端口号
+      location.pathname: 相对路径
+            .hash: 锚点地址#xxx
+            .search: 表单提交后地址栏中的查询字符串
+                   ?变量名=值&amp;变量名=值&amp;...
+ 方法:
+   1. 替换history中当前url,实现进制后退:
+     location.replace(&quot;新url&quot;)
+   2. 在当前页面打开，可后退:
+     location.assign(&quot;新url&quot;)
+       =&gt; location.href=&quot;新url&quot;
+        =&gt; location=&quot;新url&quot;
+   3. 刷新页面:  location.reload(false/true);
+     鄙视: false/true的差别
+       浏览器本地是有缓存的
+         浏览器的缓存中会保存css，图片等静态资源
+       每次请求时，首先查看缓存中是否有想要文件
+         没有想要文件，或文件过期，才去服务器下载新文件
+       reload(false) 优先使用本地缓存的文件
+       reload(true) 强制去服务器下载新文件
+     查 浏览器缓存的原理！
+</code></pre><h1 id="1、event"><a href="#1、event" class="headerlink" title="1、event"></a>1、event</h1><pre><code>绑定事件: 2种:
+ 1. 在HTML中绑定: &lt;ANY on事件名=&quot;js语句&quot;
+    问题: 不符合内容与行为分离的原则——不便于维护
+ 2. 在js中动态绑定: 2种:
+    1. 一个事件只绑定一个处理函数:
+       elem.on事件名=function(){
+         //this-&gt;elem
+       }
+       解除绑定: elem.on事件名=null;
+       问题: 每个事件只能绑定一个处理函数
+       解决:
+    2. 一个事件可同时绑定多个处理函数:
+       elem.addEventListener(&quot;事件名&quot;,function(){
+         //this-&gt;elem
+       })
+       解除绑定:
+        elem.removeEventListener(&quot;事件名&quot;,&quot;函数名&quot;);
+        强调: 如果一个事件处理函数可能被动态移除，则绑定时，不能使用匿名函数，必须使用有名称的函数
+
+    事件模型: DOM标准: 3个阶段
+      1. 捕获: 由外向内，记录各级父元素绑定的事件处理函数
+      2. 目标触发: 首先执行目标元素上的事件处理函数
+      3. 冒泡: 由内向外，反向执行捕获阶段记录的处理函数
+
+    事件对象: 事件发生时自动创建的
+             封装事件信息
+             提供操作事件的API 的对象
+      何时: 只要希望获得事件信息或修改事件的默认行为
+      如何: 事件对象，在事件发生时，通常作为事件处理函数的第一个参数，默认自动传入！
+          .on事件名=function(e){
+             //e会自动获得事件对象
+          }
+    阻止蔓延/冒泡: e.stopPropagation();
+    利用冒泡:
+      优化: 尽量少的添加事件监听
+      原理: 因为浏览器触发事件监听，是采用遍历查找的方式。添加的监听越多，遍历的速度越慢
+      如何: 如果多个子元素都要绑定相同的事件
+          只要在父元素绑定一次，所有子元素即可共用
+      难题:
+         1. 获得目标元素:
+            不能用this, 因为this指父元素
+            应该用e.target，保存实际点击的目标元素
+         2. 鉴别目标元素:
+            先判断目标元素的nodeName或className...
+            只有目标元素符合要求时，才执行事件操作
+    取消事件/阻止默认行为: e.preventDefault();
+    事件坐标: 3对儿:
+      1. 相对于整个屏幕左上角的坐标: e.screenX|screenY
+      2. 相对于文档显示区左上角的坐标: e.clientX|clientY
+      3. 相对于当前元素左上角的坐标: e.offsetX|offsetY
+
+    页面滚动:
+      事件: window.onscroll
+      获得页面滚动位置: document.body.scrollTop
+          页面超出文档显示区顶部的距离
+</code></pre>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;DOM: Document Object Model&lt;/p&gt;
+&lt;h1 id=&quot;DOM是专门操作网页内容的API标准&quot;&gt;&lt;a href=&quot;#DOM是专门操作网页内容的API标准&quot; class=&quot;headerlink&quot; title=&quot;DOM是专门操作网页内容的API标准&quot;&gt;&lt;/
+    
+    </summary>
+    
+    
+  </entry>
+  
+</feed>
