@@ -20,17 +20,17 @@
     
     
     <meta name="keywords" content="">
-    <meta name="description" content="js中几种实用的跨域方法原理详解这里说的js跨域是指通过js在不同的域之间进行数据传输或通信，比如用ajax向一个不同的域请求数据，或者通过js获取页面中不同域的框架中(iframe)的数据。只要协议、域名、端口有任何一个不同，都被当作是不同的域。 什么是跨域？ 概念：只要协议、域名、端口有任何一个不同，都被当作是不同的域。 跨域资源共享（CORS） CORS（Cross-Origin Resou">
+    <meta name="description" content="js中几种实用的跨域方法原理详解这里说的js跨域是指通过js在不同的域之间进行数据传输或通信，比如用ajax向一个不同的域请求数据，或者通过js获取页面中不同域的框架中(iframe)的数据。只要协议、域名、端口有任何一个不同，都被当作是不同的域。 跨域资源共享（CORS） CORS（Cross-Origin Resource Sharing）跨域资源共享，定义了必须在访问跨域资源时，浏览器与服务">
 <meta property="og:type" content="article">
 <meta property="og:title" content="js的几种跨越实现">
 <meta property="og:url" content="http://yuelizhang.bid/2017/05/13/yu/index.html">
 <meta property="og:site_name" content="天道酬勤">
-<meta property="og:description" content="js中几种实用的跨域方法原理详解这里说的js跨域是指通过js在不同的域之间进行数据传输或通信，比如用ajax向一个不同的域请求数据，或者通过js获取页面中不同域的框架中(iframe)的数据。只要协议、域名、端口有任何一个不同，都被当作是不同的域。 什么是跨域？ 概念：只要协议、域名、端口有任何一个不同，都被当作是不同的域。 跨域资源共享（CORS） CORS（Cross-Origin Resou">
+<meta property="og:description" content="js中几种实用的跨域方法原理详解这里说的js跨域是指通过js在不同的域之间进行数据传输或通信，比如用ajax向一个不同的域请求数据，或者通过js获取页面中不同域的框架中(iframe)的数据。只要协议、域名、端口有任何一个不同，都被当作是不同的域。 跨域资源共享（CORS） CORS（Cross-Origin Resource Sharing）跨域资源共享，定义了必须在访问跨域资源时，浏览器与服务">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-08-13T14:15:59.600Z">
+<meta property="og:updated_time" content="2017-08-13T14:17:24.833Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="js的几种跨越实现">
-<meta name="twitter:description" content="js中几种实用的跨域方法原理详解这里说的js跨域是指通过js在不同的域之间进行数据传输或通信，比如用ajax向一个不同的域请求数据，或者通过js获取页面中不同域的框架中(iframe)的数据。只要协议、域名、端口有任何一个不同，都被当作是不同的域。 什么是跨域？ 概念：只要协议、域名、端口有任何一个不同，都被当作是不同的域。 跨域资源共享（CORS） CORS（Cross-Origin Resou">
+<meta name="twitter:description" content="js中几种实用的跨域方法原理详解这里说的js跨域是指通过js在不同的域之间进行数据传输或通信，比如用ajax向一个不同的域请求数据，或者通过js获取页面中不同域的框架中(iframe)的数据。只要协议、域名、端口有任何一个不同，都被当作是不同的域。 跨域资源共享（CORS） CORS（Cross-Origin Resource Sharing）跨域资源共享，定义了必须在访问跨域资源时，浏览器与服务">
     
         <link rel="alternate" type="application/atom+xml" title="天道酬勤" href="/atom.xml">
     
@@ -176,8 +176,6 @@
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
             <h1 id="js中几种实用的跨域方法原理详解"><a href="#js中几种实用的跨域方法原理详解" class="headerlink" title="js中几种实用的跨域方法原理详解"></a>js中几种实用的跨域方法原理详解</h1><p>这里说的js跨域是指通过js在不同的域之间进行数据传输或通信，<br>比如用ajax向一个不同的域请求数据，或者通过js获取页面中不同域的框架中(iframe)的数据。<br>只要协议、域名、端口有任何一个不同，都被当作是不同的域。</p>
-<p>什么是跨域？</p>
-<p>概念：只要协议、域名、端口有任何一个不同，都被当作是不同的域。</p>
 <p>跨域资源共享（CORS）</p>
 <p>CORS（Cross-Origin Resource Sharing）跨域资源共享，定义了必须在访问跨域资源时，浏览器与服务器应该如何沟通。CORS背后的基本思想就是使用自定义的HTTP头部让浏览器与服务器进行沟通，从而决定请求或响应是应该成功还是失败。</p>
 <p><script type="text/javascript"><br>    var xhr = new XMLHttpRequest();<br>    xhr.open(“￼GET”, “/trigkit4”,true);<br>    xhr.send();<br></script><br>以上的trigkit4是相对路径，如果我们要使用CORS，相关Ajax代码可能如下所示：</p>
@@ -298,14 +296,7 @@ echo $callback.&apos;(&apos;.json_encode($data).&apos;)&apos;;//输出
     </div>
 
     
-<nav class="post-nav flex-row flex-justify-between">
-  
-    <div class="waves-block waves-effect prev">
-      <a href="/2017/08/13/git/" id="post-prev" class="post-nav-link">
-        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
-        <h4 class="title">git常用命令</h4>
-      </a>
-    </div>
+<nav class="post-nav flex-row flex-justify-between flex-row-reverse">
   
 
   
