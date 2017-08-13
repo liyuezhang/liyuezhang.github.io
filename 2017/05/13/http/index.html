@@ -27,7 +27,7 @@
 <meta property="og:site_name" content="天道酬勤">
 <meta property="og:description" content="HTTP简介HTTP协议是Hyper Text Transfer Protocol（超文本传输协议）的缩写,是用于从万维网（WWW:World Wide Web ）服务器传输超文本到本地浏览器的传送协议。 HTTP是一个基于TCP/IP通信协议来传递数据（HTML 文件, 图片文件, 查询结果等）。 HTTP是一个属于应用层的面向对象的协议，由于其简捷、快速的方式，适用于分布式超媒体信息系统。它于">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-08-13T12:29:22.367Z">
+<meta property="og:updated_time" content="2017-08-13T12:32:33.207Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="http协议">
 <meta name="twitter:description" content="HTTP简介HTTP协议是Hyper Text Transfer Protocol（超文本传输协议）的缩写,是用于从万维网（WWW:World Wide Web ）服务器传输超文本到本地浏览器的传送协议。 HTTP是一个基于TCP/IP通信协议来传递数据（HTML 文件, 图片文件, 查询结果等）。 HTTP是一个属于应用层的面向对象的协议，由于其简捷、快速的方式，适用于分布式超媒体信息系统。它于">
@@ -113,7 +113,7 @@
             <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
                 <i class="icon icon-lg icon-chevron-left"></i>
             </a>
-            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="Search">
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
             <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
                 <i class="icon icon-lg icon-search"></i>
             </a>
@@ -212,7 +212,13 @@
 <p>HTTP响应也由四个部分组成，分别是：状态行、消息报头、空行和响应正文。</p>
 <p>例子</p>
 <p>HTTP/1.1 200 OK<br>Date: Fri, 22 May 2009 06:07:21 GMT<br>Content-Type: text/html; charset=UTF-8</p>
-<p><html><br>      <head></head><br>      <body><br>            <!--body goes here--><br>      </body><br></html><br>1<br>2<br>3<br>4<br>5<br>6<br>第一部分：状态行，由HTTP协议版本号， 状态码， 状态消息 三部分组成。</p>
+<pre><code>&lt;html&gt;
+      &lt;head&gt;&lt;/head&gt;
+      &lt;body&gt;
+            &lt;!--body goes here--&gt;
+      &lt;/body&gt;
+&lt;/html&gt;
+</code></pre><p>第一部分：状态行，由HTTP协议版本号， 状态码， 状态消息 三部分组成。</p>
 <p>第一行为状态行，（HTTP/1.1）表明HTTP版本为1.1版本，状态码为200，状态消息为（ok）</p>
 <p>第二部分：消息报头，用来说明客户端要使用的一些附加信息</p>
 <p>第二行和第三行为消息报头，<br>Date:生成响应的日期和时间；Content-Type:指定了MIME类型的HTML(text/html),编码类型是UTF-8</p>
@@ -406,7 +412,7 @@
             
                 <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
             
-            <span>This blog is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</span>
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
         </p>
     </div>
     <div class="bottom">
