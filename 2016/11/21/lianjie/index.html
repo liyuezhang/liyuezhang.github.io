@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>Javascript实现页面跳转的几种方式 | 天道酬勤 | 坚持是一种信仰，专注是一种态度</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="">
+    <meta name="description" content="第一种：直接跳转加参数：1 &amp;lt;script language=&amp;quot;javascript&amp;quot; type=&amp;quot;text/javascript&amp;quot;&amp;gt; 2        window.location.href=&amp;quot;login.jsp?backurl=&amp;quot;+window.location.href;  3 &amp;lt;/script&amp;gt; 直接跳转">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Javascript实现页面跳转的几种方式">
+<meta property="og:url" content="http://yuelizhang.bid/2016/11/21/lianjie/index.html">
+<meta property="og:site_name" content="天道酬勤">
+<meta property="og:description" content="第一种：直接跳转加参数：1 &amp;lt;script language=&amp;quot;javascript&amp;quot; type=&amp;quot;text/javascript&amp;quot;&amp;gt; 2        window.location.href=&amp;quot;login.jsp?backurl=&amp;quot;+window.location.href;  3 &amp;lt;/script&amp;gt; 直接跳转">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-08-21T15:36:03.167Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Javascript实现页面跳转的几种方式">
+<meta name="twitter:description" content="第一种：直接跳转加参数：1 &amp;lt;script language=&amp;quot;javascript&amp;quot; type=&amp;quot;text/javascript&amp;quot;&amp;gt; 2        window.location.href=&amp;quot;login.jsp?backurl=&amp;quot;+window.location.href;  3 &amp;lt;/script&amp;gt; 直接跳转">
+    
+        <link rel="alternate" type="application/atom+xml" title="天道酬勤" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.icon">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">张立月</h5>
+          <a href="mailto:zly6419@163.com" title="zly6419@163.com" class="mail">zly6419@163.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                Archives
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="http://collect.w3ctrain.com/"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/yscoder"  >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/about"  >
+                <i class="icon icon-lg icon-link"></i>
+                关于
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">Javascript实现页面跳转的几种方式</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">Javascript实现页面跳转的几种方式</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2016-11-21T15:31:35.000Z" itemprop="datePublished" class="page-time">
+  2016-11-21
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#第一种："><span class="post-toc-number">1.</span> <span class="post-toc-text">第一种：</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#直接跳转加参数："><span class="post-toc-number">2.</span> <span class="post-toc-text">直接跳转加参数：</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#直接跳转无参数："><span class="post-toc-number">3.</span> <span class="post-toc-text">直接跳转无参数：</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#第二种：返回上一次预览界面"><span class="post-toc-number">4.</span> <span class="post-toc-text">第二种：返回上一次预览界面</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#标签嵌套："><span class="post-toc-number">5.</span> <span class="post-toc-text">标签嵌套：</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#第三种：指定跳转页面-对框架无效。。。"><span class="post-toc-number">6.</span> <span class="post-toc-text">第三种：指定跳转页面 对框架无效。。。</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#第四种：指定自身跳转页面-对框架无效。。。"><span class="post-toc-number">7.</span> <span class="post-toc-text">第四种：指定自身跳转页面 对框架无效。。。</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#第五种：指定自身跳转页面-对框架有效。。。"><span class="post-toc-number">8.</span> <span class="post-toc-text">第五种：指定自身跳转页面 对框架有效。。。</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#第六种：按钮式-在button按钮添加-事件跳转。。。"><span class="post-toc-number">9.</span> <span class="post-toc-text">第六种：按钮式 在button按钮添加 事件跳转。。。</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#第七种：在新窗口打开："><span class="post-toc-number">10.</span> <span class="post-toc-text">第七种：在新窗口打开：</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-lianjie"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">Javascript实现页面跳转的几种方式</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2016-11-21 23:31:35" datetime="2016-11-21T15:31:35.000Z"  itemprop="datePublished">2016-11-21</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h1 id="第一种："><a href="#第一种：" class="headerlink" title="第一种："></a>第一种：</h1><h1 id="直接跳转加参数："><a href="#直接跳转加参数：" class="headerlink" title="直接跳转加参数："></a>直接跳转加参数：</h1><pre><code>1 &lt;script language=&quot;javascript&quot; type=&quot;text/javascript&quot;&gt;
+2        window.location.href=&quot;login.jsp?backurl=&quot;+window.location.href; 
+3 &lt;/script&gt;
+</code></pre><h1 id="直接跳转无参数："><a href="#直接跳转无参数：" class="headerlink" title="直接跳转无参数："></a>直接跳转无参数：</h1><pre><code>1 &lt;script&gt;window.location.href=&apos;http://www.baidu.com&apos;;&lt;/script&gt;
+</code></pre><h1 id="第二种：返回上一次预览界面"><a href="#第二种：返回上一次预览界面" class="headerlink" title="第二种：返回上一次预览界面"></a>第二种：返回上一次预览界面</h1><pre><code>1 &lt;script language=&quot;javascript&quot;&gt;
+2 alert(&quot;返回&quot;);
+3 window.history.back(-1);
+4 &lt;/script&gt;
+</code></pre><h1 id="标签嵌套："><a href="#标签嵌套：" class="headerlink" title="标签嵌套："></a>标签嵌套：</h1><pre><code>1 &lt;a href=&quot;javascript:history.go(-1)&quot;&gt;返回上一步&lt;/a&gt;
+2 &lt;a href=&quot;&lt;%=Request.ServerVariables(&quot;HTTP_REFERER&quot;)%&gt;&quot;&gt;返回上一步&lt;/a&gt;
+</code></pre><h1 id="第三种：指定跳转页面-对框架无效。。。"><a href="#第三种：指定跳转页面-对框架无效。。。" class="headerlink" title="第三种：指定跳转页面 对框架无效。。。"></a>第三种：指定跳转页面 对框架无效。。。</h1><pre><code>1 &lt;script language=&quot;javascript&quot;&gt;
+2        window.navigate(&quot;top.jsp&quot;);
+3 &lt;/script&gt;
+</code></pre><h1 id="第四种：指定自身跳转页面-对框架无效。。。"><a href="#第四种：指定自身跳转页面-对框架无效。。。" class="headerlink" title="第四种：指定自身跳转页面 对框架无效。。。"></a>第四种：指定自身跳转页面 对框架无效。。。</h1><pre><code>1 &lt;script language=&quot;JavaScript&quot;&gt;
+2           self.location=&apos;top.htm&apos;;
+3 &lt;/script&gt;
+</code></pre><h1 id="第五种：指定自身跳转页面-对框架有效。。。"><a href="#第五种：指定自身跳转页面-对框架有效。。。" class="headerlink" title="第五种：指定自身跳转页面 对框架有效。。。"></a>第五种：指定自身跳转页面 对框架有效。。。</h1><pre><code>1 &lt;script language=&quot;javascript&quot;&gt;
+2           alert(&quot;非法访问！&quot;);
+3           top.location=&apos;xx.aspx&apos;;
+4 &lt;/script&gt;
+</code></pre><h1 id="第六种：按钮式-在button按钮添加-事件跳转。。。"><a href="#第六种：按钮式-在button按钮添加-事件跳转。。。" class="headerlink" title="第六种：按钮式 在button按钮添加 事件跳转。。。"></a>第六种：按钮式 在button按钮添加 事件跳转。。。</h1><pre><code>1 &lt;input name=&quot;pclog&quot; type=&quot;button&quot; value=&quot;GO&quot; onClick=&quot;location.href=&apos;login.aspx&apos;&quot;&gt;
+</code></pre><h1 id="第七种：在新窗口打开："><a href="#第七种：在新窗口打开：" class="headerlink" title="第七种：在新窗口打开："></a>第七种：在新窗口打开：</h1><pre><code>1 &lt;a href=&quot;javascript:&quot; onClick=&quot;window.open(&apos;login.aspx&apos;,&apos;&apos;,&apos;height=500,width=611,scrollbars=yes,status=yes&apos;)&quot;&gt;开新窗口&lt;/a&gt; 
+</code></pre><p>应用实例：</p>
+<pre><code> 1 &lt;head&gt; 
+ 2 &lt;script language=&quot;javascript&quot;&gt;
+ 3 
+ 4 function old_page() 
+ 5 { 
+ 6 window.location = &quot;login.aspx&quot; 
+ 7 } 
+ 8 function replace() 
+ 9 { 
+10 window.location.replace(&quot;login.aspx&quot;) 
+11 } 
+12 function new_page() 
+13 { 
+14 window.open(&quot;login.aspx&quot;) 
+15 } 
+16 &lt;/script&gt; 
+17 &lt;/head&gt; 
+18 &lt;body&gt; 
+19 &lt;input type=&quot;button&quot; onclick=&quot;new_page()&quot; value=&quot;在新窗口打开s&quot;/&gt; 
+20 &lt;input type=&quot;button&quot; onclick=&quot;old_page()&quot; value=&quot;跳转后有后退功能&quot;/&gt; 
+21 &lt;input type=&quot;button&quot; onclick=&quot;replace()&quot; value=&quot;跳转后没有后退功能&quot;/&gt; 
+22 &lt;/body&gt;
+</code></pre>
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+
+        
+    </div>
+    <footer>
+        <a href="http://yuelizhang.bid">
+            <img src="/img/avatar.jpg" alt="张立月">
+            张立月
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://yuelizhang.bid/2016/11/21/lianjie/&title=《Javascript实现页面跳转的几种方式》 — 天道酬勤&pic=http://yuelizhang.bid/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://yuelizhang.bid/2016/11/21/lianjie/&title=《Javascript实现页面跳转的几种方式》 — 天道酬勤&source=越有故事的人越沉静简单，越肤浅单薄的人越浮躁不安。真正的强者，不是没有眼泪的人，而是含着眼泪依然奔跑的人。我们要敢于背上超出自己预料的包袱，努力之后，你会..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://yuelizhang.bid/2016/11/21/lianjie/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Javascript实现页面跳转的几种方式》 — 天道酬勤&url=http://yuelizhang.bid/2016/11/21/lianjie/&via=http://yuelizhang.bid" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://yuelizhang.bid/2016/11/21/lianjie/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/03/02/js/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">10个JavaScript难点</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2016/11/12/sort/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">JS当中的数组去重、冒泡、快速排序</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+<section class="comments" id="comments">
+    <!-- UY BEGIN -->
+    <div id="uyan_frame"></div>
+    <script src="http://v2.uyan.cc/code/uyan.js?uid=true"></script>
+    <!-- UY END -->
+</section>
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        打发点喽~
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/alipay.jpg" alt="打赏二维码">
+        </div>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>张立月 &copy; 2015 - 2017</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://yuelizhang.bid/2016/11/21/lianjie/&title=《Javascript实现页面跳转的几种方式》 — 天道酬勤&pic=http://yuelizhang.bid/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://yuelizhang.bid/2016/11/21/lianjie/&title=《Javascript实现页面跳转的几种方式》 — 天道酬勤&source=越有故事的人越沉静简单，越肤浅单薄的人越浮躁不安。真正的强者，不是没有眼泪的人，而是含着眼泪依然奔跑的人。我们要敢于背上超出自己预料的包袱，努力之后，你会..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://yuelizhang.bid/2016/11/21/lianjie/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Javascript实现页面跳转的几种方式》 — 天道酬勤&url=http://yuelizhang.bid/2016/11/21/lianjie/&via=http://yuelizhang.bid" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://yuelizhang.bid/2016/11/21/lianjie/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://yuelizhang.bid/2016/11/21/lianjie/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '死鬼去哪里了！';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '(つェ⊂)咦!又好了!';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>
