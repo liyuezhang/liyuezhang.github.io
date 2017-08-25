@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://yuelizhang.bid/2017/02/25/es6/</loc>
+    
+    <lastmod>2017-08-25T12:44:25.006Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://yuelizhang.bid/2016/11/21/lianjie/</loc>
     
     <lastmod>2017-08-21T15:36:03.167Z</lastmod>
@@ -58,13 +65,6 @@
   </url>
   
   <url>
-    <loc>http://yuelizhang.bid/2016/08/02/zhixiang/</loc>
-    
-    <lastmod>2017-08-12T10:42:07.146Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://yuelizhang.bid/2016/09/01/question/</loc>
     
     <lastmod>2017-08-12T10:42:07.146Z</lastmod>
@@ -72,14 +72,21 @@
   </url>
   
   <url>
-    <loc>http://yuelizhang.bid/2017/03/02/js/</loc>
+    <loc>http://yuelizhang.bid/2016/08/02/zhixiang/</loc>
+    
+    <lastmod>2017-08-12T10:42:07.146Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yuelizhang.bid/2016/07/01/css3/</loc>
     
     <lastmod>2017-08-12T10:42:07.145Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yuelizhang.bid/2016/07/01/css3/</loc>
+    <loc>http://yuelizhang.bid/2017/03/02/js/</loc>
     
     <lastmod>2017-08-12T10:42:07.145Z</lastmod>
     
