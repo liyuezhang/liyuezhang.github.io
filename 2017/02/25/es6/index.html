@@ -13,7 +13,7 @@
     
     
     
-    <title>es6 | 天道酬勤 | 坚持是一种信仰，专注是一种态度</title>
+    <title>ES6 变量作用域与提升详解 | 天道酬勤 | 坚持是一种信仰，专注是一种态度</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
     <meta name="theme-color" content="#3F51B5">
@@ -22,14 +22,14 @@
     <meta name="keywords" content="">
     <meta name="description" content="变量作用域与提升在 ES6 之前，JavaScript 中只存在着函数作用域；而在 ES6 中，JavaScript 引入了 let、const 等变量声明关键字与块级作用域，在不同作用域下变量与函数的提升表现也是不一致的。在 JavaScript 中，所有绑定的声明会在控制流到达它们出现的作用域时被初始化；这里的作用域其实就是所谓的执行上下文（Execution Context），每个执行上下文">
 <meta property="og:type" content="article">
-<meta property="og:title" content="es6">
+<meta property="og:title" content="ES6 变量作用域与提升详解">
 <meta property="og:url" content="http://yuelizhang.bid/2017/02/25/es6/index.html">
 <meta property="og:site_name" content="天道酬勤">
 <meta property="og:description" content="变量作用域与提升在 ES6 之前，JavaScript 中只存在着函数作用域；而在 ES6 中，JavaScript 引入了 let、const 等变量声明关键字与块级作用域，在不同作用域下变量与函数的提升表现也是不一致的。在 JavaScript 中，所有绑定的声明会在控制流到达它们出现的作用域时被初始化；这里的作用域其实就是所谓的执行上下文（Execution Context），每个执行上下文">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-08-25T12:44:25.006Z">
+<meta property="og:updated_time" content="2017-08-25T12:46:24.122Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="es6">
+<meta name="twitter:title" content="ES6 变量作用域与提升详解">
 <meta name="twitter:description" content="变量作用域与提升在 ES6 之前，JavaScript 中只存在着函数作用域；而在 ES6 中，JavaScript 引入了 let、const 等变量声明关键字与块级作用域，在不同作用域下变量与函数的提升表现也是不一致的。在 JavaScript 中，所有绑定的声明会在控制流到达它们出现的作用域时被初始化；这里的作用域其实就是所谓的执行上下文（Execution Context），每个执行上下文">
     
         <link rel="alternate" type="application/atom+xml" title="天道酬勤" href="/atom.xml">
@@ -107,13 +107,13 @@
         <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
           <i class="icon icon-lg icon-navicon"></i>
         </a>
-        <div class="flex-col header-title ellipsis">es6</div>
+        <div class="flex-col header-title ellipsis">ES6 变量作用域与提升详解</div>
         
         <div class="search-wrap" id="search-wrap">
             <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
                 <i class="icon icon-lg icon-chevron-left"></i>
             </a>
-            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="搜尋">
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="Search">
             <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
                 <i class="icon icon-lg icon-search"></i>
             </a>
@@ -129,7 +129,7 @@
 <header class="content-header post-header">
 
     <div class="container fade-scale">
-        <h1 class="title">es6</h1>
+        <h1 class="title">ES6 变量作用域与提升详解</h1>
         <h5 class="subtitle">
             
                 <time datetime="2017-02-25T12:22:43.000Z" itemprop="datePublished" class="page-time">
@@ -160,7 +160,7 @@
   class="post-article article-type-post fade" itemprop="blogPost">
 
     <div class="post-card">
-        <h1 class="post-card-title">es6</h1>
+        <h1 class="post-card-title">ES6 变量作用域与提升详解</h1>
         <div class="post-meta">
             <time class="post-time" title="2017-02-25 20:22:43" datetime="2017-02-25T12:22:43.000Z"  itemprop="datePublished">2017-02-25</time>
 
@@ -400,7 +400,7 @@ var doc = window.document;
 <div class="page-share" id="pageShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://yuelizhang.bid/2017/02/25/es6/&title=《es6》 — 天道酬勤&pic=http://yuelizhang.bid/img/avatar.jpg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://yuelizhang.bid/2017/02/25/es6/&title=《ES6 变量作用域与提升详解》 — 天道酬勤&pic=http://yuelizhang.bid/img/avatar.jpg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -410,7 +410,7 @@ var doc = window.document;
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://yuelizhang.bid/2017/02/25/es6/&title=《es6》 — 天道酬勤&source=越有故事的人越沉静简单，越肤浅单薄的人越浮躁不安。真正的强者，不是没有眼泪的人，而是含着眼泪依然奔跑的人。我们要敢于背上超出自己预料的包袱，努力之后，你会..." data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://yuelizhang.bid/2017/02/25/es6/&title=《ES6 变量作用域与提升详解》 — 天道酬勤&source=越有故事的人越沉静简单，越肤浅单薄的人越浮躁不安。真正的强者，不是没有眼泪的人，而是含着眼泪依然奔跑的人。我们要敢于背上超出自己预料的包袱，努力之后，你会..." data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -420,7 +420,7 @@ var doc = window.document;
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《es6》 — 天道酬勤&url=http://yuelizhang.bid/2017/02/25/es6/&via=http://yuelizhang.bid" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《ES6 变量作用域与提升详解》 — 天道酬勤&url=http://yuelizhang.bid/2017/02/25/es6/&via=http://yuelizhang.bid" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
@@ -528,7 +528,7 @@ var doc = window.document;
             
                 <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
             
-            <span>本部落格係採用<a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.zh_TW">創用 CC 姓名標示 4.0 國際 授權條款授權</a></span>
+            <span>This blog is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</span>
         </p>
     </div>
     <div class="bottom">
@@ -550,7 +550,7 @@ var doc = window.document;
 <div class="global-share" id="globalShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://yuelizhang.bid/2017/02/25/es6/&title=《es6》 — 天道酬勤&pic=http://yuelizhang.bid/img/avatar.jpg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://yuelizhang.bid/2017/02/25/es6/&title=《ES6 变量作用域与提升详解》 — 天道酬勤&pic=http://yuelizhang.bid/img/avatar.jpg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -560,7 +560,7 @@ var doc = window.document;
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://yuelizhang.bid/2017/02/25/es6/&title=《es6》 — 天道酬勤&source=越有故事的人越沉静简单，越肤浅单薄的人越浮躁不安。真正的强者，不是没有眼泪的人，而是含着眼泪依然奔跑的人。我们要敢于背上超出自己预料的包袱，努力之后，你会..." data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://yuelizhang.bid/2017/02/25/es6/&title=《ES6 变量作用域与提升详解》 — 天道酬勤&source=越有故事的人越沉静简单，越肤浅单薄的人越浮躁不安。真正的强者，不是没有眼泪的人，而是含着眼泪依然奔跑的人。我们要敢于背上超出自己预料的包袱，努力之后，你会..." data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -570,7 +570,7 @@ var doc = window.document;
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《es6》 — 天道酬勤&url=http://yuelizhang.bid/2017/02/25/es6/&via=http://yuelizhang.bid" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《ES6 变量作用域与提升详解》 — 天道酬勤&url=http://yuelizhang.bid/2017/02/25/es6/&via=http://yuelizhang.bid" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
